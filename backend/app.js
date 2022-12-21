@@ -35,26 +35,53 @@ app.use(session({
 }));
  
 
-app.get('/', (req, res) => {
-    db.query(`select ${req.body.field} from testtable`).then(data => { // you're going to want to create your own wrapper functions for this shit, you want interacting with the DB to be smoother
-        res.send((data.rows))
-    }).catch(err => {
-        console.log(err)
-    }) 
+// app.get('/', (req, res) => {
+//     db.query(`select ${req.body.field} from testtable`).then(data => { // you're going to want to create your own wrapper functions for this shit, you want interacting with the DB to be smoother
+//         res.send((data.rows))
+//     }).catch(err => {
+//         console.log(err)
+//     }) 
     
-    db.query(`insert into testtable values('bloom', 'bloop')`)
+//     db.query(`insert into testtable values('bloom', 'bloop')`)
+// })
+
+app.get('/classes', (req, res) => {
+    res.send({
+        status: 200,
+        taking: [
+            {name: "Science"},
+            {name: "Phys Ed"},
+            {name: "Recess"},
+            {name: "Skip"},
+            {name: "CSE 340 - Advanced Algorithmic Analysis"},
+            {name: "Ballin"}
+        ],
+        notTaking: ["Lebron Studies", "Boomin", "Cunnilingus"]
+    })
 })
 
-app.post('/', (req, res) => {
-    console.log('hello')
-    db.query(`select ${req.body.field} from testtable`).then(data => { // you're going to want to create your own wrapper functions for this shit, you want interacting with the DB to be smoother
-        res.send((data.rows))
-    }).catch(err => {
-        console.log(err)
-    })  
-
-    db.query(`insert into testtable values('bloop', 'bloom')`)
+app.post('/login', (req, res) => {
+    res.send({
+        status: 200,
+        msg: "hello " + req.body.name
+    })
 })
+
+app.post('/class', (req,res) => {
+    res.send({
+        status: 200,
+        msg: "You've made a post request to add " + req.body.name + " to your class list"
+    })
+})
+
+app.delete('/class', (req,res) => {
+    res.send({
+        status: 200,
+        msg: "You've made a delete request to delete " + req.body.name + " from your class list"
+    })
+})
+
+
 
 
 
