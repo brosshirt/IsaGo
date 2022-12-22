@@ -10,6 +10,13 @@ import SwiftUI
 
 let addDropURL = URL(string: "http://localhost/class")!
 
+let availableURL = URL(string: "http://localhost/available")!
+
+
+
+
+
+
 func getAddDropTask(name: String, add: Bool) -> URLSessionTask{
     let body = """
     {
@@ -39,11 +46,17 @@ func getAddDropTask(name: String, add: Bool) -> URLSessionTask{
 
 struct AddDrop: View {
     // Declare a state variable to store the list of checkboxes
-    @State private var checkboxes: [Checkbox] = [
+    @Binding var classes: [Class]
+    
+    
+    @State var checkboxes: [Checkbox] = [
         Checkbox(title: "Option 1", isChecked: false),
         Checkbox(title: "Option 2", isChecked: false),
         Checkbox(title: "Option 3", isChecked: false)
     ]
+    
+    
+    
     
     @State var homeScreen = false
     
@@ -69,8 +82,36 @@ struct AddDrop: View {
             Button(action:{
                 homeScreen = true
             }){
-                Text("Go to Other View").foregroundColor(.blue)
+                Text("Back to home").foregroundColor(.blue)
             }
+            .onAppear {
+                
+                checkboxes = classes.map { my_class in
+                    Checkbox(title: my_class.class_name, isChecked: true)
+                }
+                
+                var req = URLRequest(url: availableURL)
+                req.httpMethod = "GET"
+                req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+                URLSession.shared.dataTask(with: req) {data, response, error in
+                    do {
+                        if let data = data, let response = String(data: data, encoding: .utf8){
+                            let newData = response.data(using: .utf8)!
+                            let res = try decoder.decode(ClassesResponse.self, from: newData)
+                            print(res.classes)
+                            let moreCheckboxes = res.classes.map { my_class in
+                                Checkbox(title: my_class.class_name, isChecked:false)
+                            }
+                            checkboxes.append(contentsOf: moreCheckboxes)
+                        }
+                    }
+                    catch {
+                        print(error)
+                    }
+
+                }.resume()
+             }
         }
         
         
@@ -84,8 +125,8 @@ struct Checkbox: Identifiable {
     var isChecked: Bool
 }
 
-struct AddDrop_Previews: PreviewProvider {
-    static var previews: some View {
-        AddDrop()
-    }
-}
+//struct AddDrop_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddDrop()
+//    }
+//}

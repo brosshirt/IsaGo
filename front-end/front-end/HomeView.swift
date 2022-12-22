@@ -10,59 +10,52 @@ import Foundation
 
 
 class Class: Hashable, Codable{
-    let name: String
+    let class_name: String
 
-    init(name: String) {
-        self.name = name
+    init(class_name: String) {
+        self.class_name = class_name
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
+        hasher.combine(class_name)
     }
 
     static func == (lhs: Class, rhs: Class) -> Bool {
-        return lhs.name == rhs.name
+        return lhs.class_name == rhs.class_name
     }
 }
 
 struct ClassesResponse: Codable {
     let status: Int
-    let taking: [Class]
-    let notTaking: [String]
+    let classes: [Class]
 }
 
 let decoder = JSONDecoder()
 
 
-
-
 let classesURL = URL(string: "http://localhost/classes")!
-
-
-
-
 
 
 struct HomeView: View {
     @State var selectClasses = false
     
-    @State var classes: [Class] = [Class(name: "Class1"), Class(name: "Class2")]
+    @State var classes: [Class] = []
 
     var body: some View {
         if (selectClasses){
-            AddDrop()
+            AddDrop(classes: $classes)
         }
         else{
             Text("My Classes")
                 .font(.largeTitle)
                 .padding()
             List(classes, id: \.self) { item in
-                Text(item.name)
+                Text(item.class_name)
             }
             Button(action:{
                 selectClasses = true
             }){
-                Text("Go to Other View").foregroundColor(.blue)
+                Text("Add/Drop").foregroundColor(.blue)
             }
             .onAppear {
                 var req = URLRequest(url: classesURL)
@@ -74,7 +67,7 @@ struct HomeView: View {
                         if let data = data, let response = String(data: data, encoding: .utf8){
                             let newData = response.data(using: .utf8)!
                             let res = try decoder.decode(ClassesResponse.self, from: newData)
-                            classes = res.taking
+                            classes = res.classes
                         }
                     }
                     catch {
