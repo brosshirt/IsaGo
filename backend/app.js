@@ -125,7 +125,7 @@ app.get('/available', (req, res) => {
 
 
 
-app.post('/l    ogin', (req, res) => {
+app.post('/login', (req, res) => {
     
     db.query(`
         INSERT INTO student(student_id)
