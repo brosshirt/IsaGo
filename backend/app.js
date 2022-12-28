@@ -93,18 +93,33 @@ populateDB()
 
 
 app.get('/classes', (req, res) => {
-    console.log(req.session.student_id)
-    
-    db.query(`select class_name from class where class_name in (
-        select class_name from takes where student_id = '${req.session.student_id}')`)
-        .then(data => { 
+    console.log("This route is being touched by " + req.session.username);
+    db.query(` 
+        WITH taking AS (
+            select class_name from class where class_name in (
+                select class_name from takes where student_id = '${req.session.student_id}')
+        )
+        SELECT t.class_name,
+                CASE WHEN t.class_name IN (SELECT class_name FROM taking) THEN true ELSE false END AS isTaking
+        FROM class AS t`).then(data => {
+            let taking = []
+            let notTaking = []
+            for (row of data.rows){
+                if (row.istaking){
+                    taking.push({class_name: row.class_name})
+                }
+                else{
+                    notTaking.push({class_name: row.class_name})
+                }
+            }
             res.send({
                 status: 200,
-                classes: data.rows 
+                taking: taking, 
+                notTaking: notTaking
             })
-    }).catch(err => {
-        console.log(err)
-    }) 
+        }).catch(err => {
+            console.log(err)
+        })
 })
 
 app.get('/available', (req, res) => {
@@ -126,7 +141,10 @@ app.get('/available', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-    
+    console.log("Getting the request and all that, it all looks good")
+    console.log("req.body.name is " + req.body.name)
+
+
     db.query(`
         INSERT INTO student(student_id)
         VALUES ('${req.body.name}')
@@ -135,13 +153,14 @@ app.post('/login', (req, res) => {
     req.session.student_id = req.body.name
     
     res.send({
-        status: 200,
-        msg: "hello " + req.body.name
+        status: 200
     })
 })
 
 app.post('/class', (req,res) => {
-    
+    console.log(req.session.student_id + " is trying to add a class")
+
+
     db.query(`
         insert into takes values ('${req.session.student_id}','${req.body.name}')
     `)
@@ -151,6 +170,8 @@ app.post('/class', (req,res) => {
 })
 
 app.delete('/class', (req,res) => {
+    console.log(req.session.student_id + " is trying to delete a class")
+    
     db.query(`
         delete from takes where student_id = '${req.session.student_id}' and class_name = '${req.body.name}'
     `)

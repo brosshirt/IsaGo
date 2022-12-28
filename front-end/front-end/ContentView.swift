@@ -8,33 +8,15 @@
 import SwiftUI
 
 
-let loginURL = URL(string: "http://localhost/login")!
-
-func getLoginTask(name: String = "Titty Man") -> URLSessionTask{
-    print("default name is \(name)")
-    let body = """
-    {
-        "name": "\(name)"
-    }
-    """
+struct Classes {
+    var taking: [Class]
+    var notTaking: [Class]
     
-    var req = URLRequest(url: loginURL)
-    req.httpMethod = "POST"
-    req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    req.httpBody = body.data(using: .utf8)
-    
-    return URLSession.shared.uploadTask(with: req, from: nil){ data, response, error in
-        if let error = error {
-            print("Error \(error)")
-            return
-        }
-        
-        if let data = data, let response = String(data: data, encoding: .utf8){
-            print("Response: \(response)")
-        }
+    init(taking: [Class], notTaking: [Class]) {
+        self.taking = taking
+        self.notTaking = notTaking
     }
 }
-
 
 
 
@@ -46,9 +28,11 @@ struct ContentView: View {
     @State private var userID = ""
     @State private var dummy = ""
     
+    @State var classes: Classes = Classes(taking: [], notTaking: [])
+    
     var body: some View {
         if (homeview){
-            HomeView()
+            HomeView(classes: $classes)
         }
         else{
             Text("Login (Baby)")
@@ -62,8 +46,24 @@ struct ContentView: View {
                             TextField("Dummy Field", text: $dummy)
                         }
                         Button(action: {
-                            front_end.getLoginTask(name:userID).resume()
-                            userID = ""
+                            let body = """
+                            {
+                                "name": "\(userID)"
+                            }
+                            """
+                            httpReq(method: "POST", body: body, route: "login") { loginResponse in
+                                let res = getEmptyResponse(response: loginResponse)
+                                if (res.status == 200){
+                                    userID = ""
+                                    httpReq(method: "GET", body: "", route: "classes") { classesResponse in
+                                        let res = getClassesResponse(response: classesResponse)
+                                        classes.taking = res.taking
+                                        classes.notTaking = res.notTaking
+                                    }
+                                }
+                                
+                            }
+                            
                         }) {
                             Text("Submit")
                         }

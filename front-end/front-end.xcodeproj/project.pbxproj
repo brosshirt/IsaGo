@@ -16,6 +16,9 @@
 		6E45E826295248A50038543F /* front_endUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45E825295248A50038543F /* front_endUITestsLaunchTests.swift */; };
 		6E45E833295268670038543F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45E832295268670038543F /* HomeView.swift */; };
 		6E45E8372952898F0038543F /* AddDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45E8362952898F0038543F /* AddDrop.swift */; };
+		6E45E83D2956189A0038543F /* MyHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45E83C2956189A0038543F /* MyHTTP.swift */; };
+		6E45E83F29563C980038543F /* Responses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45E83E29563C980038543F /* Responses.swift */; };
+		6E45E84129563CC40038543F /* DBObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45E84029563CC40038543F /* DBObjects.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6E45E805295248A40038543F /* front-end.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "front-end.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E0896EE295A1ECB0001DDCC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		6E45E805295248A40038543F /* IsaGo Education.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IsaGo Education.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E45E808295248A40038543F /* front_endApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = front_endApp.swift; sourceTree = "<group>"; };
 		6E45E80A295248A40038543F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		6E45E80C295248A50038543F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -48,6 +52,9 @@
 		6E45E825295248A50038543F /* front_endUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = front_endUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		6E45E832295268670038543F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		6E45E8362952898F0038543F /* AddDrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDrop.swift; sourceTree = "<group>"; };
+		6E45E83C2956189A0038543F /* MyHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHTTP.swift; sourceTree = "<group>"; };
+		6E45E83E29563C980038543F /* Responses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responses.swift; sourceTree = "<group>"; };
+		6E45E84029563CC40038543F /* DBObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBObjects.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,7 +95,7 @@
 		6E45E806295248A40038543F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6E45E805295248A40038543F /* front-end.app */,
+				6E45E805295248A40038543F /* IsaGo Education.app */,
 				6E45E815295248A50038543F /* front-endTests.xctest */,
 				6E45E81F295248A50038543F /* front-endUITests.xctest */,
 			);
@@ -98,12 +105,16 @@
 		6E45E807295248A40038543F /* front-end */ = {
 			isa = PBXGroup;
 			children = (
+				6E0896EE295A1ECB0001DDCC /* Info.plist */,
 				6E45E808295248A40038543F /* front_endApp.swift */,
 				6E45E80A295248A40038543F /* ContentView.swift */,
 				6E45E80C295248A50038543F /* Assets.xcassets */,
 				6E45E80E295248A50038543F /* Preview Content */,
 				6E45E832295268670038543F /* HomeView.swift */,
 				6E45E8362952898F0038543F /* AddDrop.swift */,
+				6E45E83C2956189A0038543F /* MyHTTP.swift */,
+				6E45E83E29563C980038543F /* Responses.swift */,
+				6E45E84029563CC40038543F /* DBObjects.swift */,
 			);
 			path = "front-end";
 			sourceTree = "<group>";
@@ -150,7 +161,7 @@
 			);
 			name = "front-end";
 			productName = "front-end";
-			productReference = 6E45E805295248A40038543F /* front-end.app */;
+			productReference = 6E45E805295248A40038543F /* IsaGo Education.app */;
 			productType = "com.apple.product-type.application";
 		};
 		6E45E814295248A50038543F /* front-endTests */ = {
@@ -263,10 +274,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E45E83F29563C980038543F /* Responses.swift in Sources */,
 				6E45E833295268670038543F /* HomeView.swift in Sources */,
 				6E45E80B295248A40038543F /* ContentView.swift in Sources */,
+				6E45E84129563CC40038543F /* DBObjects.swift in Sources */,
 				6E45E8372952898F0038543F /* AddDrop.swift in Sources */,
 				6E45E809295248A40038543F /* front_endApp.swift in Sources */,
+				6E45E83D2956189A0038543F /* MyHTTP.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,8 +439,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"front-end/Preview Content\"";
+				DEVELOPMENT_TEAM = QPU6V2X782;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "front-end/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Isago ";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -437,8 +454,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Isago.front-end";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.isagoeducation;
+				PRODUCT_NAME = "IsaGo Education";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -453,8 +470,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"front-end/Preview Content\"";
+				DEVELOPMENT_TEAM = QPU6V2X782;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "front-end/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Isago ";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -465,8 +485,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Isago.front-end";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.isagoeducation;
+				PRODUCT_NAME = "IsaGo Education";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
