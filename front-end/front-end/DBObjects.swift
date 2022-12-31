@@ -24,6 +24,26 @@ class Class: Hashable, Codable{
     }
 }
 
+class Lesson: Hashable, Codable{
+    let lesson_name: String
+    let lesson_date: String
+
+    init(lesson_name: String, lesson_date: String) {
+        self.lesson_name = lesson_name
+        self.lesson_date = lesson_date
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(lesson_name)
+    }
+
+    static func == (lhs: Lesson, rhs: Lesson) -> Bool {
+        return lhs.lesson_name == rhs.lesson_name && lhs.lesson_date == rhs.lesson_date
+    }
+}
+
+
+
 // Declare a struct to represent a single checkbox
 struct Checkbox: Identifiable {
     let id: UUID = UUID()

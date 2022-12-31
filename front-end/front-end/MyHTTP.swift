@@ -8,13 +8,17 @@
 import Foundation
 
 
-let backendURL = "http://18.219.18.132/"
-//let backendURL = "http://localhost/"
+//let backendURL = "http://18.219.18.132/"
+let backendURL = "http://localhost/"
+
+func sanitizeRoute(route: String) -> String{
+    return route.replacingOccurrences(of: " ", with: "%20")
+}
 
 func httpReq(method: String, body: String, route: String, onRes: @escaping (String) -> Void) -> Void {
-
+    let santizedRoute = sanitizeRoute(route: route)
     
-    let url = URL(string: backendURL + route)!
+    let url = URL(string: backendURL + santizedRoute)!
     var req = URLRequest(url: url)
     req.httpMethod = method
     req.setValue("application/json", forHTTPHeaderField: "Content-Type")

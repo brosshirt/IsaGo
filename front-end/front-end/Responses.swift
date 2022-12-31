@@ -49,7 +49,30 @@ func getEmptyResponse(response:String) -> EmptyResponse{
         emptyResponse = try decoder.decode(EmptyResponse.self, from: newData)
     }
     catch{
-        print("Error converting response string to ClassesResponse")
+        print("Error converting response string to EmptyResponse")
     }
     return emptyResponse
+}
+
+struct LessonsResponse: Codable {
+    let status: Int
+    let lessons: [Lesson]
+    
+    init(status: Int, lessons: [Lesson]) {
+        self.status = status
+        self.lessons = lessons
+    }
+}
+
+func getLessonsResponse(response:String) -> LessonsResponse{
+    var lessonsResponse = LessonsResponse(status: 0, lessons: [])
+    do {
+        let newData = response.data(using: .utf8)!
+        lessonsResponse = try decoder.decode(LessonsResponse.self, from: newData)
+    }
+    catch{
+        print("Error converting response string to LessonsResponse")
+        print(error)
+    }
+    return lessonsResponse
 }
