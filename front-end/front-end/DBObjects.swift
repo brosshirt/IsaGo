@@ -8,7 +8,7 @@
 import Foundation
 
 
-class Class: Hashable, Codable{
+class Class: Hashable, Codable, Identifiable{
     let class_name: String
 
     init(class_name: String) {

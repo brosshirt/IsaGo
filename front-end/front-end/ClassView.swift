@@ -12,41 +12,45 @@ import Foundation
 
 
 struct ClassView: View {
-    @Binding var lessons: [Lesson]
     @Binding var class_name: String
-    @Binding var classes: Classes
+    
+    @State var lessons: [Lesson] = []
+    
     
     @State var homeView = false;
     @State var lesson = ""
     
-    
     var body: some View {
-        if (homeView){
-            HomeView(classes: $classes)
-        }
-        else if (lesson != ""){
+        if (lesson != ""){
             LessonView(lessonName: $lesson)
         }
         else{
+            
             Text(class_name)
                 .font(.largeTitle)
-                .padding()
             List(lessons, id: \.self) { item in
-                HStack {
-                    Text(item.lesson_name)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(item.lesson_date.substring(start: 5, end: 10))
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                }.onTapGesture {
-                    lesson = item.lesson_name
+                NavigationLink(value: item){
+                    HStack {
+                        Text(item.lesson_name)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Text(item.lesson_date.substring(start: 5, end: 10))
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                    }
                 }
             }
-            Button(action:{
-                homeView = true
-            }){
-                Text("Back to home").foregroundColor(.blue)
+            .navigationDestination(for: Lesson.self) { lesson in
+                LessonView(lessonName: .constant(lesson.lesson_name))
+            }
+
+            
+            .onAppear{
+                httpReq(method: "GET", body: "", route: "classes/" + class_name) { lessonsResponse in
+                    let res = getLessonsResponse(response: lessonsResponse)
+                    lessons = res.lessons
+                }
             }
         }
+            
         
     }
 }

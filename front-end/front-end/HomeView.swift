@@ -14,12 +14,12 @@ import Foundation
 let decoder = JSONDecoder()
 
 
-
-
 struct HomeView: View {
     @State var selectClasses = false
     @State var lessons: [Lesson] = []
     @State var class_name: String = ""
+    
+    @State var path = NavigationPath()
     
     @Binding var classes: Classes
 
@@ -27,33 +27,22 @@ struct HomeView: View {
         if (selectClasses){
             AddDropView(classes: $classes)
         }
-        else if (lessons != []){
-            ClassView(lessons: .constant(lessons), class_name: $class_name, classes: $classes)
-        }
         else{
-            Text("My Classes")
-                .font(.largeTitle)
-                .padding()
-            List(classes.taking, id: \.self) { item in
-                Text(item.class_name)
-                    .onTapGesture {
-                        print(item.class_name)
-                        httpReq(method: "GET", body: "", route: item.class_name) { lessonsResponse in
-                            let res = getLessonsResponse(response: lessonsResponse)
-                            // you need to load a class view
-                            class_name = item.class_name
-                            lessons = res.lessons
-//                            lessons = [Lesson(lesson_name: "Friendship", lesson_date: "12-26"),
-//                                                                       Lesson(lesson_name: "Kindness", lesson_date: "12-27"),
-//                                                                       Lesson(lesson_name: "Honesty", lesson_date: "12-28")]
-                            return 
-                        }
-                    }
-            }
-            Button(action:{
-                selectClasses = true
-            }){
-                Text("Add/Drop").foregroundColor(.blue)
+            NavigationStack (path: $path){
+                Text("My Classes")
+                    .font(.largeTitle)
+                List(classes.taking, id: \.self){ item in
+                    NavigationLink(item.class_name, value: item)
+                }
+                .navigationDestination(for: Class.self) { my_class in
+                    ClassView(class_name: .constant(my_class.class_name))
+                }
+                NavigationLink(destination: AddDropView(classes: $classes)) {
+                    Text("Add/Drop")
+                        .font(.system(size: 22))
+                        .padding(10)
+                }
+                
             }
         }
     }

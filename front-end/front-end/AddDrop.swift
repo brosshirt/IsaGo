@@ -23,7 +23,6 @@ struct AddDropView: View {
         else{
             Text("Add and Drop Classes")
                 .font(.largeTitle)
-                .padding()
             List($checkboxes) { $checkbox in
                 HStack {
                     // Use a Toggle to create the checkbox
@@ -35,7 +34,7 @@ struct AddDropView: View {
                             "name": "\(checkbox.title)"
                         }
                         """
-                        httpReq(method: value ? "POST" : "DELETE", body: body, route: "class") { response in
+                        httpReq(method: value ? "POST" : "DELETE", body: body, route: "classes") { response in
                             let res = getEmptyResponse(response: response)
                             if (res.status == 200){
                                 if (value){
@@ -63,11 +62,6 @@ struct AddDropView: View {
                         }
                     }
                 }
-            }
-            Button(action:{
-                homeScreen = true
-            }){
-                Text("Back to home").foregroundColor(.blue)
             }
             .onAppear {
                 checkboxes = classes.taking.map { my_class in
