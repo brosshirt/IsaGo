@@ -59,16 +59,18 @@ struct PDFViewer: UIViewRepresentable {
 
 
 struct LessonView: View {
+    @EnvironmentObject var router: Router
     @Binding var lesson: Lesson
     
     var body: some View {
         GeometryReader{ geometry in
             PDFViewer(screenWidth: .constant(Double(geometry.size.width)), lesson: $lesson)
                 .navigationBarItems(trailing:
-                NavigationLink("Give feedback", value: String(lesson.lesson_name + " " + lesson.class_name)))
-                .navigationDestination(for: String.self) { lessonInfo in
-                    FeedBackView(lessonInfo: .constant(lessonInfo))
-                }
+                    Button(action: {
+                        router.reset()
+                    }) {
+                        Text("Classes")
+                    })
         }
         
     }

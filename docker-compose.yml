@@ -16,10 +16,10 @@ services:
       - 80:3000
     depends_on:
       - postgres
-    # volumes: ## locally
-    #   - /Users/benjaminrosshirt/Documents/Lessons:/app/lessons
-    volumes: ## lightsail
-      - /home/ubuntu/Lessons:/app/lessons
+    volumes: ## locally
+      - /Users/benjaminrosshirt/Documents/Lessons:/app/lessons
+    # volumes: ## lightsail
+    #   - /home/ubuntu/Lessons:/app/lessons
 
 volumes:
   db:

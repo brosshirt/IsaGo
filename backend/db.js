@@ -6,6 +6,7 @@ function buildDB(db){
     buildStudentTable(db)
     buildTakesTable(db)
     buildLessonTable(db)
+    buildFeedbackTable(db)
 }
 
 function buildClassTable(db){
@@ -26,6 +27,18 @@ function buildLessonTable(db){
         lesson_name varchar,
         lesson_date timestamp,
         PRIMARY KEY (class_name, lesson_name))`)
+}
+
+function buildFeedbackTable(db){
+    db.query(`create table if not exists feedback (
+        class_name varchar references class(class_name),
+        lesson_name varchar,
+        feedback varchar primary key,
+        feedback_date timestamp default current_timestamp,
+        student_id varchar references student(student_id),
+          FOREIGN KEY (class_name, lesson_name) REFERENCES lesson (class_name, lesson_name)
+    )
+    `)
 }
 
 

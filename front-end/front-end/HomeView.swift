@@ -19,7 +19,7 @@ struct HomeView: View {
     @State var lessons: [Lesson] = []
     @State var class_name: String = ""
     
-    @State var path = NavigationPath()
+    @EnvironmentObject var router:Router
     
     @Binding var classes: Classes
 
@@ -28,7 +28,7 @@ struct HomeView: View {
             AddDropView(classes: $classes)
         }
         else{
-            NavigationStack (path: $path){
+            NavigationStack (path: $router.path){
                 Text("My Classes")
                     .font(.largeTitle)
                 List(classes.taking, id: \.self){ item in
@@ -42,8 +42,12 @@ struct HomeView: View {
                         .font(.system(size: 22))
                         .padding(10)
                 }
-                
+                .navigationBarItems(trailing:
+                    NavigationLink(destination: FeedbackView(classes: $classes.taking)) {
+                            Text("Give Feedback")
+                        })
             }
+            
         }
     }
 }

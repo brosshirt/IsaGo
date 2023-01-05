@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct front_endApp: App {
+    @StateObject var router = Router()
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(router)
         }
     }
 }

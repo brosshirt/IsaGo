@@ -59,8 +59,9 @@ router.get('/:class_name/:lesson_name', (req, res) => {
         status: 200,
         lesson: pdfBase64
     })
-
 })
+
+
 
 
 router.post('/', (req,res) => {

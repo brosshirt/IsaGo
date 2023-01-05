@@ -13,7 +13,6 @@ struct AddDropView: View {
     @Binding var classes: Classes
     @State var checkboxes: [Checkbox] = []
     
-    
     @State var homeScreen = false
     
     var body: some View {

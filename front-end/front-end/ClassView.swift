@@ -16,6 +16,8 @@ struct ClassView: View {
     
     @State var lessons: [Lesson] = []
     
+    @EnvironmentObject var router: Router
+    
     
     @State var homeView = false;
     
@@ -37,6 +39,12 @@ struct ClassView: View {
         .navigationDestination(for: Lesson.self) { lesson in
             LessonView(lesson: .constant(lesson))
         }
+        .navigationBarItems(trailing:
+            Button(action: {
+                router.reset()
+            }) {
+                Text("Classes")
+            })
         .onAppear{
             httpReq(method: "GET", body: "", route: "classes/" + class_name) { lessonsResponse in
                 let res = getLessonsResponse(response: lessonsResponse)

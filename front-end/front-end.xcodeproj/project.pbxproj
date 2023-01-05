@@ -23,6 +23,7 @@
 		6E45E83D2956189A0038543F /* MyHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45E83C2956189A0038543F /* MyHTTP.swift */; };
 		6E45E83F29563C980038543F /* Responses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45E83E29563C980038543F /* Responses.swift */; };
 		6E45E84129563CC40038543F /* DBObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45E84029563CC40038543F /* DBObjects.swift */; };
+		6EE9CE96296726DB00194BAC /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE9CE95296726DB00194BAC /* Router.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		6E45E83C2956189A0038543F /* MyHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHTTP.swift; sourceTree = "<group>"; };
 		6E45E83E29563C980038543F /* Responses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responses.swift; sourceTree = "<group>"; };
 		6E45E84029563CC40038543F /* DBObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBObjects.swift; sourceTree = "<group>"; };
+		6EE9CE95296726DB00194BAC /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 				6E26774C2963489A00A56A5E /* lib */,
 				6E45E80C295248A50038543F /* Assets.xcassets */,
 				6E45E80E295248A50038543F /* Preview Content */,
+				6EE9CE95296726DB00194BAC /* Router.swift */,
 			);
 			path = "front-end";
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				6E45E83F29563C980038543F /* Responses.swift in Sources */,
 				6E2C132F295FE4AF00063067 /* LessonView.swift in Sources */,
 				6E45E833295268670038543F /* HomeView.swift in Sources */,
+				6EE9CE96296726DB00194BAC /* Router.swift in Sources */,
 				6E31C97629662FBF007ED919 /* FeedBackView.swift in Sources */,
 				6E45E80B295248A40038543F /* ContentView.swift in Sources */,
 				6E2C132B295FD40700063067 /* ClassView.swift in Sources */,
