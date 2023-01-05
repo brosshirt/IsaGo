@@ -18,38 +18,32 @@ struct ClassView: View {
     
     
     @State var homeView = false;
-    @State var lesson = ""
     
     var body: some View {
-        if (lesson != ""){
-            LessonView(lessonName: $lesson)
-        }
-        else{
+        
             
-            Text(class_name)
-                .font(.largeTitle)
-            List(lessons, id: \.self) { item in
-                NavigationLink(value: item){
-                    HStack {
-                        Text(item.lesson_name)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        Text(item.lesson_date.substring(start: 5, end: 10))
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                    }
-                }
-            }
-            .navigationDestination(for: Lesson.self) { lesson in
-                LessonView(lessonName: .constant(lesson.lesson_name))
-            }
-
-            
-            .onAppear{
-                httpReq(method: "GET", body: "", route: "classes/" + class_name) { lessonsResponse in
-                    let res = getLessonsResponse(response: lessonsResponse)
-                    lessons = res.lessons
+        Text(class_name)
+            .font(.largeTitle)
+        List(lessons, id: \.self) { item in
+            NavigationLink(value: item){
+                HStack {
+                    Text(item.lesson_name)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(item.lesson_date.substring(start: 5, end: 10))
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
         }
+        .navigationDestination(for: Lesson.self) { lesson in
+            LessonView(lesson: .constant(lesson))
+        }
+        .onAppear{
+            httpReq(method: "GET", body: "", route: "classes/" + class_name) { lessonsResponse in
+                let res = getLessonsResponse(response: lessonsResponse)
+                lessons = res.lessons
+            }
+        }
+        
             
         
     }

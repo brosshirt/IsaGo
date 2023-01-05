@@ -76,3 +76,26 @@ func getLessonsResponse(response:String) -> LessonsResponse{
     }
     return lessonsResponse
 }
+
+struct LessonResponse: Codable {
+    let status: Int
+    let lesson: String
+    
+    init(status: Int, lesson: String) {
+        self.status = status
+        self.lesson = lesson
+    }
+}
+
+func getLessonResponse(response:String) -> LessonResponse{
+    var lessonResponse = LessonResponse(status: 0, lesson: "")
+    do {
+        let newData = response.data(using: .utf8)!
+        lessonResponse = try decoder.decode(LessonResponse.self, from: newData)
+    }
+    catch{
+        print("Error converting response string to LessonResponse")
+        print(error)
+    }
+    return lessonResponse
+}

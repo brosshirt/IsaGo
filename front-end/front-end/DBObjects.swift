@@ -25,10 +25,12 @@ class Class: Hashable, Codable, Identifiable{
 }
 
 class Lesson: Hashable, Codable{
+    let class_name: String
     let lesson_name: String
     let lesson_date: String
 
-    init(lesson_name: String, lesson_date: String) {
+    init(class_name: String, lesson_name: String, lesson_date: String) {
+        self.class_name = class_name
         self.lesson_name = lesson_name
         self.lesson_date = lesson_date
     }

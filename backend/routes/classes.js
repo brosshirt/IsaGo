@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
 
 router.get('/', (req, res) => {
     console.log("/classes is being touched by " + req.session.student_id);
@@ -36,7 +37,9 @@ router.get('/:class_name', (req, res) => {
     db.query(`
         select lesson_name, lesson_date from lesson where class_name = '${req.params.class_name}' order by lesson_date desc`)
         .then(data => {
-            console.log(data.rows)
+            for (row of data.rows){
+                row.class_name = req.params.class_name
+            }
             res.send({
                 status: 200,
                 lessons: data.rows
@@ -44,7 +47,18 @@ router.get('/:class_name', (req, res) => {
         }).catch(err => {
             console.log(err)
         })
+})
 
+router.get('/:class_name/:lesson_name', (req, res) => {
+    console.log("/:class_name/:lesson_name is being touched by " + req.session.student_id);
+    
+    const fileBuffer = fs.readFileSync(`/app/lessons/${req.params.class_name}/${req.params.lesson_name}.pdf`);
+    const pdfBase64 = fileBuffer.toString('base64');
+
+    res.send({
+        status: 200,
+        lesson: pdfBase64
+    })
 
 })
 
