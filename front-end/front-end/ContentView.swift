@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Auth0
 
 
 struct Classes {
@@ -24,10 +25,7 @@ struct Classes {
 struct ContentView: View {
     
     @State var homeview = false
-    
-    @State private var userID = ""
-    @State private var dummy = ""
-    
+        
     @State var classes: Classes = Classes(taking: [], notTaking: [])
     
     var body: some View {
@@ -35,47 +33,40 @@ struct ContentView: View {
             HomeView(classes: $classes)
         }
         else{
-            Text("Login (Baby)")
-                .font(.largeTitle)
-                .padding()
-            NavigationView{
-                VStack{
-                    Form{
-                        Section(header: Text("Sign In")){
-                            TextField("Username", text: $userID)
-                            TextField("Dummy Field", text: $dummy)
-                        }
-                        Button(action: {
+            Button(action: {
+                Auth0.webAuth().start{ result in
+                    switch result{
+                        case.failure(let error):
+                            print(error)
+                        
+                        case.success(let credentials):
+                            let profile = Profile.from(credentials.idToken)
+                            print(profile.email.substring(start: 0, end: 6))
                             let body = """
                             {
-                                "name": "\(userID)"
+                                "name": "\(profile.email.substring(start: 0, end: 6))"
                             }
                             """
                             httpReq(method: "POST", body: body, route: "login") { loginResponse in
                                 let res = getEmptyResponse(response: loginResponse)
                                 if (res.status == 200){
-                                    userID = ""
                                     httpReq(method: "GET", body: "", route: "classes") { classesResponse in
                                         let res = getClassesResponse(response: classesResponse)
                                         classes.taking = res.taking
                                         classes.notTaking = res.notTaking
+                                        homeview = true
                                     }
                                 }
-                                
                             }
-                            
-                        }) {
-                            Text("Submit")
-                        }
-                    }
-                    Button(action:{
-                        homeview = true
-                    }){
-                        Text("Go to classes big dog")
+                        
                     }
                 }
+            }) {
+                Text("Log in")
             }
         }
+
+    
     }
     
 }

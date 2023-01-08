@@ -13,8 +13,7 @@ let url = URL(fileURLWithPath: "/Users/benjaminrosshirt/Downloads/lesson.pdf")
 func getPDF(lesson: Lesson) -> Data{
     var pdfData = Data()
 
-    let group = DispatchGroup()
-    group.enter()
+    
     
     
     httpReq(method: "GET", body: "", route: "classes/\(lesson.class_name)/\(lesson.lesson_name)") { lessonResponse in
@@ -22,9 +21,7 @@ func getPDF(lesson: Lesson) -> Data{
         if (res.status == 200){
             pdfData = Data(base64Encoded: res.lesson)!
         }
-        group.leave()
     }
-    group.wait()
     return pdfData
     
 }
@@ -33,21 +30,21 @@ func getPDF(lesson: Lesson) -> Data{
 //
 struct PDFViewer: UIViewRepresentable {
     @Binding var screenWidth: Double
-    @Binding var lesson: Lesson
-
+    @Binding var pdfDocument: PDFDocument
+    
     func makeUIView(context: Context) -> PDFView {
+        print("This code only runs once")
         let pdfView = PDFView()
-        pdfView.document = PDFDocument(data: getPDF(lesson: lesson))
+        pdfView.document = pdfDocument
+        
 
-        let page = pdfView.document?.page(at: 0)
-        let pdfWidth = (page?.bounds(for: .mediaBox).size.width)!
+        guard let page = pdfView.document?.page(at: 0) else { return pdfView }
+        let pdfWidth = (page.bounds(for: .mediaBox).size.width)
 
         let scaleFactor = (0.98 * screenWidth) / pdfWidth
 
         pdfView.scaleFactor = scaleFactor
         pdfView.minScaleFactor = scaleFactor
-
-
 
         return pdfView
     }
@@ -62,9 +59,11 @@ struct LessonView: View {
     @EnvironmentObject var router: Router
     @Binding var lesson: Lesson
     
+    @State var pdfDocument = PDFDocument()
+    
     var body: some View {
         GeometryReader{ geometry in
-            PDFViewer(screenWidth: .constant(Double(geometry.size.width)), lesson: $lesson)
+            PDFViewer(screenWidth: .constant(Double(geometry.size.width)), pdfDocument: $pdfDocument)
                 .navigationBarItems(trailing:
                     Button(action: {
                         router.reset()
@@ -72,7 +71,16 @@ struct LessonView: View {
                         Text("Classes")
                     })
         }
-        
+        .id(pdfDocument) // this causes the view to rerender whenever this field changes
+        .onAppear{
+            httpReq(method: "GET", body: "", route: "classes/\(lesson.class_name)/\(lesson.lesson_name)") { lessonResponse in
+                let res = getLessonResponse(response: lessonResponse)
+                if (res.status == 200){
+                    let pdfData = Data(base64Encoded: res.lesson)!
+                    pdfDocument = PDFDocument(data: pdfData)!
+                }
+            }
+        }
     }
 }
 
