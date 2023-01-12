@@ -16,9 +16,9 @@ router.post('/', (req, res) => {
     }
 
     let sanitizedReqBody = {
-        class_name: req.body.class_name != "None" ? `'${req.body.class_name}'` : 'default',
-        lesson_name: req.body.lesson_name != "None" ? `'${req.body.lesson_name}'` : 'default',
-        feedback: `'${req.body.feedback}'`,
+        class_name: req.body.class_name != "None" ? req.body.class_name : 'default',
+        lesson_name: req.body.lesson_name != "None" ? req.body.lesson_name : 'default',
+        feedback: req.body.feedback,
     }
 
     console.log(sanitizedReqBody)
