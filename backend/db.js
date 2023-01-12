@@ -25,7 +25,7 @@ function buildLessonTable(db){
     db.query(`create table if not exists lesson(
         class_name varchar references class(class_name),
         lesson_name varchar,
-        lesson_date timestamp,
+        lesson_date timestamp default current_timestamp,
         PRIMARY KEY (class_name, lesson_name))`)
 }
 
@@ -59,19 +59,11 @@ function populateClasses(db){
         INSERT INTO class(class_name)
         VALUES ('MATH 92')
         ON CONFLICT (class_name) DO NOTHING;`)
-    db.query(`
-        INSERT INTO class(class_name)
-        VALUES ('SEX 109')
-        ON CONFLICT (class_name) DO NOTHING;`)
 }
 
 function populateLessons(db){
     // So for each class we want to add 3 lessons, I want the dates to be dec 28, 29, 30
-    db.query(`
-        insert into lesson (class_name, lesson_name, lesson_date) values ('SEX 109', 'I miss her so much', '2022-12-30') ON CONFLICT (class_name, lesson_name) DO NOTHING;
-        insert into lesson (class_name, lesson_name, lesson_date) values ('SEX 109', 'Filling the void', '2022-12-29') ON CONFLICT (class_name, lesson_name) DO NOTHING;
-        insert into lesson (class_name, lesson_name, lesson_date) values ('SEX 109', 'Eating box', '2022-12-28') ON CONFLICT (class_name, lesson_name) DO NOTHING;
-        
+    db.query(`    
         insert into lesson (class_name, lesson_name, lesson_date) values ('MATH 92', 'Switching Majors', '2022-12-30') ON CONFLICT (class_name, lesson_name) DO NOTHING;
         insert into lesson (class_name, lesson_name, lesson_date) values ('MATH 92', 'Using ChatGPT', '2022-12-29') ON CONFLICT (class_name, lesson_name) DO NOTHING;
         insert into lesson (class_name, lesson_name, lesson_date) values ('MATH 92', 'Using Calculators', '2022-12-28') ON CONFLICT (class_name, lesson_name) DO NOTHING; 
@@ -110,7 +102,7 @@ function getDB(){
     db.connect()
 
     buildDB(db)
-    populateDB(db)
+    // populateDB(db)
 
     return db
 }

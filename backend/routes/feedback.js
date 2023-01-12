@@ -24,14 +24,16 @@ router.post('/', (req, res) => {
     console.log(sanitizedReqBody)
 
 
-    
-    db.query(`
-    insert into feedback values (${sanitizedReqBody.class_name}, ${sanitizedReqBody.lesson_name}, ${sanitizedReqBody.feedback}, default, '${req.session.student_id}')
-    `).then(data => {
+    const query = `insert into feedback values ($1, $2, $3, default, $4)`
+
+    const values = [sanitizedReqBody.class_name, sanitizedReqBody.lesson_name, sanitizedReqBody.feedback, req.session.student_id]
+
+    db.query(query, values).then(data => {
         res.send({
             status: 200,
         })
     }).catch(err => {
+        console.log(err)
         res.send({
             status:400,
             msg: "Somebody has already sent that exact feedback"

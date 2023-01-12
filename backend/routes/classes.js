@@ -4,14 +4,18 @@ const fs = require('fs');
 
 router.get('/', (req, res) => {
     console.log("/classes is being touched by " + req.session.student_id);
-    db.query(` 
-        WITH taking AS (
-            select class_name from class where class_name in (
-                select class_name from takes where student_id = '${req.session.student_id}')
-        )
-        SELECT t.class_name,
-                CASE WHEN t.class_name IN (SELECT class_name FROM taking) THEN true ELSE false END AS isTaking
-        FROM class AS t`).then(data => {
+
+    const query = `WITH taking AS (
+        select class_name from class where class_name in (
+            select class_name from takes where student_id = $1)
+    )
+    SELECT t.class_name,
+            CASE WHEN t.class_name IN (SELECT class_name FROM taking) THEN true ELSE false END AS isTaking
+    FROM class AS t`
+
+    const values = [req.session.student_id]
+
+    db.query(query, values).then(data => {
             let taking = []
             let notTaking = []
             for (row of data.rows){
@@ -29,13 +33,21 @@ router.get('/', (req, res) => {
             })
         }).catch(err => {
             console.log(err)
+            res.send({
+                status: 400,
+                msg: "An error has occurred retrieving classes"
+            })
         })
 })
 
 router.get('/:class_name', (req, res) => {
     console.log("/:class_name is being touched by " + req.session.student_id);
-    db.query(`
-        select lesson_name, lesson_date from lesson where class_name = '${req.params.class_name}' order by lesson_date desc`)
+    
+    const query = `select lesson_name, lesson_date from lesson where class_name = $1 order by lesson_date desc`
+    
+    const values = [req.params.class_name]
+    
+    db.query(query, values)
         .then(data => {
             for (row of data.rows){
                 row.class_name = req.params.class_name
@@ -46,19 +58,31 @@ router.get('/:class_name', (req, res) => {
             })
         }).catch(err => {
             console.log(err)
+            res.send({
+                status: 400,
+                msg: "An error has retrieving " + req.params.class_name
+            })
         })
 })
 
 router.get('/:class_name/:lesson_name', (req, res) => {
     console.log("/:class_name/:lesson_name is being touched by " + req.session.student_id);
-    
-    const fileBuffer = fs.readFileSync(`/app/lessons/${req.params.class_name}/${req.params.lesson_name}.pdf`);
-    const pdfBase64 = fileBuffer.toString('base64');
+    try{
+        const fileBuffer = fs.readFileSync(`/app/lessons/${req.params.class_name}/${req.params.lesson_name}.pdf`);
+        const pdfBase64 = fileBuffer.toString('base64');
 
-    res.send({
-        status: 200,
-        lesson: pdfBase64
-    })
+        res.send({
+            status: 200,
+            lesson: pdfBase64
+        })
+    }
+    catch(err){
+        console.log(err)
+        res.send({
+            status: 400,
+            msg: "An error has retrieving " + req.params.lesson_name
+        })
+    }
 })
 
 
@@ -67,25 +91,46 @@ router.get('/:class_name/:lesson_name', (req, res) => {
 router.post('/', (req,res) => {
     console.log(req.session.student_id + " is trying to add the class " + req.body.name)
 
+    const query = `insert into takes values ($1,$2)`
 
-    db.query(`
-        insert into takes values ('${req.session.student_id}','${req.body.name}')
-    `)
-    res.send({
-        status: 200
+    const values = [req.session.student_id, req.body.name]
+
+
+    db.query(query, values).then(data => {
+        res.send({
+            status: 200
+        })
+    }).catch(err => {
+        console.log(err)
+        res.send({
+            status: 400,
+            msg: "An error has occured adding a class"
+        })
     })
+    
 })
 
 router.delete('/', (req,res) => {
     console.log(req.session.student_id + " is trying to delete the class " + req.body.name)
     
-    db.query(`
-        delete from takes where student_id = '${req.session.student_id}' and class_name = '${req.body.name}'
-    `)
-    
-    res.send({
-        status: 200
+    const query = `delete from takes where student_id = $1 and class_name = $2`
+
+    const values = [req.session.student_id, req.body.name]
+
+
+    db.query(query, values).then(data => {
+        res.send({
+            status: 200
+        })
+    }).catch(err => {
+        console.log(err)
+        res.send({
+            status: 400,
+            msg: "An error has occured removing a class"
+        })
     })
+    
+    
 })
 
 module.exports = router;

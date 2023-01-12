@@ -9,22 +9,6 @@ import SwiftUI
 import PDFKit
 
 let url = URL(fileURLWithPath: "/Users/benjaminrosshirt/Downloads/lesson.pdf")
-
-func getPDF(lesson: Lesson) -> Data{
-    var pdfData = Data()
-
-    
-    
-    
-    httpReq(method: "GET", body: "", route: "classes/\(lesson.class_name)/\(lesson.lesson_name)") { lessonResponse in
-        let res = getLessonResponse(response: lessonResponse)
-        if (res.status == 200){
-            pdfData = Data(base64Encoded: res.lesson)!
-        }
-    }
-    return pdfData
-    
-}
 //
 //
 //
@@ -33,7 +17,6 @@ struct PDFViewer: UIViewRepresentable {
     @Binding var pdfDocument: PDFDocument
     
     func makeUIView(context: Context) -> PDFView {
-        print("This code only runs once")
         let pdfView = PDFView()
         pdfView.document = pdfDocument
         
@@ -73,15 +56,21 @@ struct LessonView: View {
         }
         .id(pdfDocument) // this causes the view to rerender whenever this field changes
         .onAppear{
-            httpReq(method: "GET", body: "", route: "classes/\(lesson.class_name)/\(lesson.lesson_name)") { lessonResponse in
-                let res = getLessonResponse(response: lessonResponse)
-                if (res.status == 200){
-                    let pdfData = Data(base64Encoded: res.lesson)!
-                    pdfDocument = PDFDocument(data: pdfData)!
+            let url = URL(string: s3Url(class_name: lesson.class_name, lesson_name: lesson.lesson_name))!
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data, error == nil {
+                    pdfDocument = PDFDocument(data: data)!
+                } else {
+                    print("Error fetching pdf data: \(error!)")
                 }
             }
+            task.resume()
         }
     }
+}
+
+func s3Url(class_name:String, lesson_name: String) -> String {
+    return sanitizeRoute(route: "https://s3.amazonaws.com/isago-lessons/\(class_name)/\(lesson_name).pdf")
 }
 
 //struct LessonView_Previews: PreviewProvider {
