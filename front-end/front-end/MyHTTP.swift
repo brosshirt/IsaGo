@@ -8,8 +8,8 @@
 import Foundation
 
 
-//let backendURL = "http://18.219.18.132/"
-let backendURL = "http://localhost/"
+let backendURL = "http://18.219.18.132/"
+//let backendURL = "http://localhost/"
 
 func sanitizeRoute(route: String) -> String{
     return route.replacingOccurrences(of: " ", with: "%20")

@@ -39,6 +39,7 @@ function buildLessonTable(db){
     db.query(`create table if not exists lesson(
         class_name varchar references class(class_name),
         lesson_name varchar,
+        lesson_date timestamp default current_timestamp,
         PRIMARY KEY (class_name, lesson_name))`)
 }
 function buildLectureTable(db){

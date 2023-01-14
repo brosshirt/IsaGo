@@ -27,7 +27,6 @@ struct AddDropView: View {
                 HStack {
                     // Use a Toggle to create the checkbox
                     Toggle(isOn: $checkbox.isChecked){
-//                        Text(checkbox.class_name)
                         HStack {
                             Text(checkbox.class_name)
                                 .frame(maxWidth: .infinity, alignment: .leading)
