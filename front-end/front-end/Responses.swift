@@ -54,6 +54,29 @@ func getEmptyResponse(response:String) -> EmptyResponse{
     return emptyResponse
 }
 
+struct LecturesResponse: Codable {
+    let status: Int
+    let lectures: [Lecture]
+    
+    init(status: Int, lessons: [Lecture]) {
+        self.status = status
+        self.lectures = lessons
+    }
+}
+
+func getLecturesResponse(response:String) -> LecturesResponse{
+    var lecturesResponse = LecturesResponse(status: 0, lessons: [])
+    do {
+        let newData = response.data(using: .utf8)!
+        lecturesResponse = try decoder.decode(LecturesResponse.self, from: newData)
+    }
+    catch{
+        print("Error converting response string to LecturesResponse")
+        print(error)
+    }
+    return lecturesResponse
+}
+
 struct LessonsResponse: Codable {
     let status: Int
     let lessons: [Lesson]
@@ -65,37 +88,15 @@ struct LessonsResponse: Codable {
 }
 
 func getLessonsResponse(response:String) -> LessonsResponse{
-    var lessonsResponse = LessonsResponse(status: 0, lessons: [])
+    var lessonResponse = LessonsResponse(status: 0, lessons: [])
     do {
         let newData = response.data(using: .utf8)!
-        lessonsResponse = try decoder.decode(LessonsResponse.self, from: newData)
+        lessonResponse = try decoder.decode(LessonsResponse.self, from: newData)
     }
     catch{
-        print("Error converting response string to LessonsResponse")
-        print(error)
-    }
-    return lessonsResponse
-}
-
-struct LessonResponse: Codable {
-    let status: Int
-    let lesson: String
-    
-    init(status: Int, lesson: String) {
-        self.status = status
-        self.lesson = lesson
-    }
-}
-
-func getLessonResponse(response:String) -> LessonResponse{
-    var lessonResponse = LessonResponse(status: 0, lesson: "")
-    do {
-        let newData = response.data(using: .utf8)!
-        lessonResponse = try decoder.decode(LessonResponse.self, from: newData)
-    }
-    catch{
-        print("Error converting response string to LessonResponse")
+        print("Error converting response string to LecturesResponse")
         print(error)
     }
     return lessonResponse
 }
+

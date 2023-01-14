@@ -16,8 +16,8 @@ router.post('/', (req, res) => {
     }
 
     let sanitizedReqBody = {
-        class_name: req.body.class_name != "None" ? req.body.class_name : 'default',
-        lesson_name: req.body.lesson_name != "None" ? req.body.lesson_name : 'default',
+        class_name: req.body.class_name != "None" ? req.body.class_name : undefined,
+        lesson_name: req.body.lesson_name != "None" ? req.body.lesson_name : undefined,
         feedback: req.body.feedback,
     }
 
@@ -26,6 +26,7 @@ router.post('/', (req, res) => {
 
     const query = `insert into feedback values ($1, $2, $3, default, $4)`
 
+    // const values = [sanitizedReqBody.class_name, sanitizedReqBody.lesson_name, sanitizedReqBody.feedback, req.session.student_id]
     const values = [sanitizedReqBody.class_name, sanitizedReqBody.lesson_name, sanitizedReqBody.feedback, req.session.student_id]
 
     db.query(query, values).then(data => {

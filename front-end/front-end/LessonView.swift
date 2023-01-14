@@ -40,7 +40,7 @@ struct PDFViewer: UIViewRepresentable {
 
 struct LessonView: View {
     @EnvironmentObject var router: Router
-    @Binding var lesson: Lesson
+    @Binding var lesson: Lecture
     
     @State var pdfDocument = PDFDocument()
     

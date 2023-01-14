@@ -32,10 +32,17 @@ struct HomeView: View {
                 Text("My Classes")
                     .font(.largeTitle)
                 List(classes.taking, id: \.self){ item in
-                    NavigationLink(item.class_name, value: item)
+                    NavigationLink(value: item){
+                        HStack {
+                                Text(item.class_name)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                Text(timeString(class_time: item.class_time))
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                            }
+                    }
                 }
                 .navigationDestination(for: Class.self) { my_class in
-                    ClassView(class_name: .constant(my_class.class_name))
+                    ClassView(myClass: .constant(my_class))
                 }
                 NavigationLink(destination: AddDropView(classes: $classes)) {
                     Text("Add/Drop")
@@ -43,14 +50,31 @@ struct HomeView: View {
                         .padding(10)
                 }
                 .navigationBarItems(trailing:
-                    NavigationLink(destination: FeedbackView(classes: $classes.taking)) {
+                                        NavigationLink(destination: FeedbackView(classes: .constant(removeDuplicateClasses(classes: classes.taking)))) {
                             Text("Give Feedback")
                         })
             }
-            
         }
     }
 }
+
+func removeDuplicateClasses(classes: [Class]) -> [Class]{
+    var output: [Class] = []
+    for section in classes{
+        var addSection = true
+        for myClass in output{
+            if (myClass.class_name == section.class_name){
+                addSection = false
+            }
+        }
+        if (addSection){
+            output.append(section)
+        }
+    }
+    return output
+}
+
+
 
 //struct HomeView_Previews: PreviewProvider {
 //    static var previews: some View {

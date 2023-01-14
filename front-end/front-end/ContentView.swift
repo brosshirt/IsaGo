@@ -8,7 +8,7 @@
 import SwiftUI
 import Auth0
 
-
+// this is just a simplified version of the response to get /classes, it represents the data needed to display the first couple views
 struct Classes {
     var taking: [Class]
     var notTaking: [Class]
@@ -62,7 +62,14 @@ struct ContentView: View {
                     }
                 }
             }) {
-                Text("Log in")
+                VStack{
+                    Image("isago_hat")
+                    Text("Login")
+                }
+                .onAppear{
+
+                    NotificationManager.instance.requestAuthorization()
+                }
             }
         }
 

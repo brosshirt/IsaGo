@@ -108,83 +108,9 @@ func submitFeedback(selectedClass: String, selectedLesson: String, feedback: Str
     }
 }
 
-
-//struct FeedbackView: View {
-//    @Binding var classes: [Class]
+//struct FeedbackView_Previews: PreviewProvider {
 //
-//    @State var feedback: String = ""
-//
-//
-//    @State var lessons: [String] = ["lesson1", "lesson2", "lesson3", "lesson4"]
-//
-//
-//    @State private var selectedClass: String = "None"
-//    @State private var selectedLesson: String = "None"
-//
-//    var body: some View {
-//        Text("Feedback")
-//            .font(.largeTitle)
-//        Spacer()
-//        VStack {
-//            VStack(alignment: .leading){
-//                HStack{
-//                    Text("Class this in reference to:")
-//                    Picker(
-//                        selection: $selectedClass,
-//                        label:
-//                            Text(selectedClass)
-//                        ,
-//                        content: {
-//                            Text("None").tag("None")
-//                            ForEach(classes, id: \.self) { myClass in
-//                                    Text(myClass.class_name).tag(myClass.class_name)
-//                            }
-//                        }
-//                    )
-//                }
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//                if selectedClass != "None" {
-//                    HStack{
-//                        Text("Lesson this in reference to:")
-//                        Picker(
-//                            selection: $selectedLesson,
-//                            label:
-//                                Text(selectedLesson)
-//                            ,
-//                            content: {
-//                                Text("None").tag("None")
-//                                ForEach(lessons, id: \.self) { lesson in
-//                                        Text(lesson).tag(lesson)
-//                                }
-//                            }
-//                        )
-//                    }
-//                }
-//            }
-//            .padding(.all)
-//            Spacer()
-//            VStack(alignment: .leading) {
-//                Text("Feedback:")
-//                TextField("Write your feedback here", text: $feedback)
-//                    .padding(.horizontal, 8)
-//                    .border(Color.gray.opacity(0.5), width: 1)
-//                    .frame(minHeight: 50)
-//            }
-//            Spacer()
-//            Spacer()
-//
-//        }
-//        Spacer()
-//        Button("Send feedback") {
-//            // send feedback here
-//        }
+//    static var previews: some View {
+//        FeedbackView(classes: .constant([Class(class_name: "Mech 83"), Class(class_name: "Sex 109"), Class(class_name: "Jizz 22")]))
 //    }
 //}
-
-
-struct FeedbackView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        FeedbackView(classes: .constant([Class(class_name: "Mech 83"), Class(class_name: "Sex 109"), Class(class_name: "Jizz 22")]))
-    }
-}

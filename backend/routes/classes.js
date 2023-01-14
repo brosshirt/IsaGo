@@ -6,12 +6,12 @@ router.get('/', (req, res) => {
     console.log("/classes is being touched by " + req.session.student_id);
 
     const query = `WITH taking AS (
-        select class_name from class where class_name in (
-            select class_name from takes where student_id = $1)
+        select class_name, class_time from section where (class_name, class_time) in (
+            select class_name, class_time from takes where student_id = $1)
     )
-    SELECT t.class_name,
-            CASE WHEN t.class_name IN (SELECT class_name FROM taking) THEN true ELSE false END AS isTaking
-    FROM class AS t`
+    SELECT t.class_name, t.class_time,
+            CASE WHEN (t.class_name, t.class_time) IN (SELECT class_name, class_time FROM taking) THEN true ELSE false END AS isTaking
+    FROM section AS t`
 
     const values = [req.session.student_id]
 
@@ -20,10 +20,10 @@ router.get('/', (req, res) => {
             let notTaking = []
             for (row of data.rows){
                 if (row.istaking){
-                    taking.push({class_name: row.class_name})
+                    taking.push({class_name: row.class_name, class_time: row.class_time})
                 }
                 else{
-                    notTaking.push({class_name: row.class_name})
+                    notTaking.push({class_name: row.class_name, class_time: row.class_time})
                 }
             }
             res.send({
@@ -40,10 +40,11 @@ router.get('/', (req, res) => {
         })
 })
 
+
 router.get('/:class_name', (req, res) => {
     console.log("/:class_name is being touched by " + req.session.student_id);
     
-    const query = `select lesson_name, lesson_date from lesson where class_name = $1 order by lesson_date desc`
+    const query = `select * from lesson where class_name = $1 order by lesson_date desc`
     
     const values = [req.params.class_name]
     
@@ -65,35 +66,39 @@ router.get('/:class_name', (req, res) => {
         })
 })
 
-router.get('/:class_name/:lesson_name', (req, res) => {
-    console.log("/:class_name/:lesson_name is being touched by " + req.session.student_id);
-    try{
-        const fileBuffer = fs.readFileSync(`/app/lessons/${req.params.class_name}/${req.params.lesson_name}.pdf`);
-        const pdfBase64 = fileBuffer.toString('base64');
 
-        res.send({
-            status: 200,
-            lesson: pdfBase64
+router.get('/:class_name/:class_time', (req, res) => {
+    console.log("/:class_name/:class_time is being touched by " + req.session.student_id);
+    
+    const query = `select lesson_name, lecture_date from lecture where class_name = $1 and class_time = $2 order by lecture_date desc`
+    
+    const values = [req.params.class_name, req.params.class_time]
+    
+    db.query(query, values)
+        .then(data => {
+            for (row of data.rows){
+                row.class_name = req.params.class_name
+            }
+            res.send({
+                status: 200,
+                lectures: data.rows
+            })
+        }).catch(err => {
+            console.log(err)
+            res.send({
+                status: 400,
+                msg: "An error has retrieving " + req.params.class_name
+            })
         })
-    }
-    catch(err){
-        console.log(err)
-        res.send({
-            status: 400,
-            msg: "An error has retrieving " + req.params.lesson_name
-        })
-    }
 })
 
 
-
-
 router.post('/', (req,res) => {
-    console.log(req.session.student_id + " is trying to add the class " + req.body.name)
+    console.log(req.session.student_id + " is trying to add the section " + req.body.class_name + " taught at " + req.body.class_time)
 
-    const query = `insert into takes values ($1,$2)`
+    const query = `insert into takes values ($1,$2,$3)`
 
-    const values = [req.session.student_id, req.body.name]
+    const values = [req.session.student_id, req.body.class_name, req.body.class_time]
 
 
     db.query(query, values).then(data => {
@@ -111,11 +116,11 @@ router.post('/', (req,res) => {
 })
 
 router.delete('/', (req,res) => {
-    console.log(req.session.student_id + " is trying to delete the class " + req.body.name)
+    console.log(req.session.student_id + " is trying to delete the section " + req.body.class_name + "taught at " + req.body.class_time)
     
-    const query = `delete from takes where student_id = $1 and class_name = $2`
+    const query = `delete from takes where student_id = $1 and class_name = $2 and class_time = $3`
 
-    const values = [req.session.student_id, req.body.name]
+    const values = [req.session.student_id, req.body.class_name, req.body.class_time]
 
 
     db.query(query, values).then(data => {
