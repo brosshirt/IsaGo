@@ -22,8 +22,6 @@ struct ClassView: View {
     @State var homeView = false;
     
     var body: some View {
-        
-            
         Text(myClass.class_name)
             .font(.largeTitle)
         List(lectures, id: \.self) { item in
@@ -46,14 +44,12 @@ struct ClassView: View {
                 Text("Classes")
             })
         .onAppear{
+            print("classview")
             httpReq(method: "GET", body: "", route: "classes/" + myClass.class_name + "/" + myClass.class_time) { lecturesResponse in
                 let res = getLecturesResponse(response: lecturesResponse)
                 lectures = res.lectures
             }
         }
-        
-            
-        
     }
 }
 

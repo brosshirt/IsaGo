@@ -24,16 +24,19 @@ class NotificationManager{
     
     func scheduleNotification(className: String, classTime: String){
         let content = UNMutableNotificationContent()
-        content.title = "Today's \(className) lecture starts in 15 minutes!"
+        content.title = "\(className) starting in 15 minutes!"
         content.subtitle = "Tap to quickly view today's summary"
         content.sound = .default
         
-        
-        let dateComponents = dateComponents(from: classTime)
-        
-        for dateComponent in dateComponents{
-            // we need to create the request, which means we need to create the trigger
-            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: true)
+        let dateComponentsArray = dateComponents(from: classTime)
+
+        for dateComponents in dateComponentsArray{
+            print("weekday: \(dateComponents.weekday!)")
+            print("hour: \(dateComponents.hour!)")
+            print("minute: \(dateComponents.minute!)")
+
+
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
             let request = UNNotificationRequest(
                 identifier: className + classTime,
                 content: content,
@@ -41,10 +44,12 @@ class NotificationManager{
             UNUserNotificationCenter.current().add(request)
         }
         
-        
-        
-        
-        
+        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+            for request in requests {
+                print("\(request.identifier) \(request.content.title) \(request.content.body)")
+            }
+        }
+
     }
     
     func removeNotification(className: String, classTime: String){
@@ -76,6 +81,7 @@ class NotificationManager{
                 dateComponents.hour = hour
                 dateComponents.minute = minute! - 15
             }
+
             
             dateComponentsArray.append(dateComponents)
         }

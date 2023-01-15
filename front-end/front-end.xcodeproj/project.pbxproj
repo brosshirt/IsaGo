@@ -28,6 +28,9 @@
 		6EE9CE9B296B197D00194BAC /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6EE9CE9A296B197D00194BAC /* Auth0.plist */; };
 		6EE9CE9D296B1E2400194BAC /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE9CE9C296B1E2400194BAC /* Profile.swift */; };
 		6EE9CE9F297220AA00194BAC /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE9CE9E297220AA00194BAC /* NotificationManager.swift */; };
+		6EE9CEA12972FBB700194BAC /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE9CEA02972FBB700194BAC /* Loader.swift */; };
+		6EE9CEA729731B0000194BAC /* HasLoaded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE9CEA629731B0000194BAC /* HasLoaded.swift */; };
+		6EE9CEA929737C0800194BAC /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE9CEA829737C0800194BAC /* UserInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +75,9 @@
 		6EE9CE9A296B197D00194BAC /* Auth0.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Auth0.plist; sourceTree = "<group>"; };
 		6EE9CE9C296B1E2400194BAC /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		6EE9CE9E297220AA00194BAC /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		6EE9CEA02972FBB700194BAC /* Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
+		6EE9CEA629731B0000194BAC /* HasLoaded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HasLoaded.swift; sourceTree = "<group>"; };
+		6EE9CEA829737C0800194BAC /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +128,7 @@
 				6E45E8362952898F0038543F /* AddDrop.swift */,
 				6E45E832295268670038543F /* HomeView.swift */,
 				6E31C97529662FBF007ED919 /* FeedBackView.swift */,
+				6EE9CEA02972FBB700194BAC /* Loader.swift */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -157,6 +164,8 @@
 				6E45E80C295248A50038543F /* Assets.xcassets */,
 				6E45E80E295248A50038543F /* Preview Content */,
 				6EE9CE95296726DB00194BAC /* Router.swift */,
+				6EE9CEA829737C0800194BAC /* UserInfo.swift */,
+				6EE9CEA629731B0000194BAC /* HasLoaded.swift */,
 			);
 			path = "front-end";
 			sourceTree = "<group>";
@@ -328,6 +337,7 @@
 				6E2C132F295FE4AF00063067 /* LessonView.swift in Sources */,
 				6EE9CE9D296B1E2400194BAC /* Profile.swift in Sources */,
 				6EE9CE9F297220AA00194BAC /* NotificationManager.swift in Sources */,
+				6EE9CEA929737C0800194BAC /* UserInfo.swift in Sources */,
 				6E45E833295268670038543F /* HomeView.swift in Sources */,
 				6EE9CE96296726DB00194BAC /* Router.swift in Sources */,
 				6E31C97629662FBF007ED919 /* FeedBackView.swift in Sources */,
@@ -337,6 +347,8 @@
 				6E45E8372952898F0038543F /* AddDrop.swift in Sources */,
 				6E45E809295248A40038543F /* front_endApp.swift in Sources */,
 				6E45E83D2956189A0038543F /* MyHTTP.swift in Sources */,
+				6EE9CEA12972FBB700194BAC /* Loader.swift in Sources */,
+				6EE9CEA729731B0000194BAC /* HasLoaded.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

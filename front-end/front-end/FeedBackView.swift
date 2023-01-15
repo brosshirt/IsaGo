@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct FeedbackView: View {
-    @Binding var classes: [Class]
-    
+    @EnvironmentObject var userInfo:UserInfo
+        
     @State var feedback = ""
 
     @State var lessons: [Lesson] = []
     
     @State var submitted = false;
     
-    @State private var selectedClass: String = "None"
-    @State private var selectedLesson: String = "None"
+    @State var selectedClass: String
+    @State var selectedLesson: String
 
     var body: some View {
         NavigationView{
@@ -32,11 +32,12 @@ struct FeedbackView: View {
                         ,
                         content: {
                             Text("None").tag("None")
-                            ForEach(classes, id: \.self) { myClass in
+                            ForEach(removeDuplicateClasses(classes: userInfo.classes.taking), id: \.self) { myClass in
                                 Text(myClass.class_name).tag(myClass.class_name)
                             }
                         }
                     ).onChange(of: selectedClass) { value in
+                        selectedLesson = "None"
                         if value != "None" {
                             httpReq(method: "GET", body: "", route: "classes/" + selectedClass) { lessonsResponse in
                                 let res = getLessonsResponse(response: lessonsResponse)
@@ -70,12 +71,21 @@ struct FeedbackView: View {
                     selectedClass = "None"
                     selectedLesson = "None"
                     feedback = ""
+                    lessons = []
                     submitted = true
                 }, label: {
                     Text("Submit Feedback")
                 })
             }
             .navigationTitle("Feedback")
+            .onAppear{
+                if selectedClass != "None" {
+                    httpReq(method: "GET", body: "", route: "classes/" + selectedClass) { lessonsResponse in
+                        let res = getLessonsResponse(response: lessonsResponse)
+                        lessons = res.lessons
+                    }
+                }
+            }
         }
         if (submitted){
             ZStack {

@@ -25,12 +25,15 @@ struct Classes {
 struct ContentView: View {
     
     @State var homeview = false
-        
-    @State var classes: Classes = Classes(taking: [], notTaking: [])
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject var userInfo:UserInfo
+
     
     var body: some View {
         if (homeview){
-            HomeView(classes: $classes)
+            HomeView()
         }
         else{
             Button(action: {
@@ -52,8 +55,7 @@ struct ContentView: View {
                                 if (res.status == 200){
                                     httpReq(method: "GET", body: "", route: "classes") { classesResponse in
                                         let res = getClassesResponse(response: classesResponse)
-                                        classes.taking = res.taking
-                                        classes.notTaking = res.notTaking
+                                        userInfo.updateClasses(taking: res.taking, notTaking: res.notTaking)
                                         homeview = true
                                     }
                                 }
@@ -63,11 +65,19 @@ struct ContentView: View {
                 }
             }) {
                 VStack{
-                    Image("isago_hat")
+                    if colorScheme == .dark {
+                            Image("isago_hat")
+                                .resizable()
+                                .frame(minWidth: 0, maxWidth: 60, minHeight: 0, maxHeight: 60)
+                                .colorInvert()
+                        } else {
+                            Image("isago_hat")
+                                .resizable()
+                                .frame(minWidth: 0, maxWidth: 60, minHeight: 0, maxHeight: 60)
+                        }
                     Text("Login")
                 }
                 .onAppear{
-
                     NotificationManager.instance.requestAuthorization()
                 }
             }

@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "AppIcon.png",
+      "filename" : "isago_320.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "isago_640.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "isago_1280.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

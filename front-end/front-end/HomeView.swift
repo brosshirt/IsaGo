@@ -15,46 +15,52 @@ let decoder = JSONDecoder()
 
 
 struct HomeView: View {
-    @State var selectClasses = false
     @State var lessons: [Lesson] = []
     @State var class_name: String = ""
     
     @EnvironmentObject var router:Router
-    
-    @Binding var classes: Classes
+    @EnvironmentObject var hasLoaded:HasLoaded
+    @EnvironmentObject var userInfo:UserInfo
 
     var body: some View {
-        if (selectClasses){
-            AddDropView(classes: $classes)
-        }
-        else{
-            NavigationStack (path: $router.path){
-                Text("My Classes")
-                    .font(.largeTitle)
-                List(classes.taking, id: \.self){ item in
-                    NavigationLink(value: item){
-                        HStack {
-                                Text(item.class_name)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                Text(timeString(class_time: item.class_time))
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                            }
+        NavigationStack (path: $router.path){
+            Text("My Classes")
+                .font(.largeTitle)
+            List(userInfo.classes.taking, id: \.self){ item in
+                NavigationLink(value: item){
+                    HStack {
+                            Text(item.class_name)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Text(timeString(class_time: item.class_time))
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                        }
+                }
+            }
+            .navigationDestination(for: Class.self) { my_class in
+                ClassView(myClass: .constant(my_class))
+            }
+            NavigationLink(destination: AddDropView()) {
+                Text("Add/Drop")
+                    .font(.system(size: 22))
+                    .padding(10)
+            }
+            .navigationBarItems(trailing:
+                NavigationLink(destination: FeedbackView(selectedClass: "None", selectedLesson: "None")) {
+                    Text("Give Feedback")
+                }
+            )
+            .onAppear{
+                print(userInfo.classes.taking)
+                if !hasLoaded.hasLoaded{
+                    UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                    for myClass in userInfo.classes.taking{
+                        NotificationManager.instance.scheduleNotification(className: myClass.class_name, classTime: myClass.class_time)
                     }
+                    hasLoaded.hasLoaded = true
                 }
-                .navigationDestination(for: Class.self) { my_class in
-                    ClassView(myClass: .constant(my_class))
-                }
-                NavigationLink(destination: AddDropView(classes: $classes)) {
-                    Text("Add/Drop")
-                        .font(.system(size: 22))
-                        .padding(10)
-                }
-                .navigationBarItems(trailing:
-                                        NavigationLink(destination: FeedbackView(classes: .constant(removeDuplicateClasses(classes: classes.taking)))) {
-                            Text("Give Feedback")
-                        })
             }
         }
+        
     }
 }
 

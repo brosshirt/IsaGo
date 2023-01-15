@@ -31,7 +31,12 @@ func httpReq(method: String, body: String, route: String, onRes: @escaping (Stri
         }
         
         if let data = data, let response = String(data: data, encoding: .utf8){
-            onRes(response)
+            // this is overkill, I've yet to figure out how to handle this 'modifying objects from the background issue'
+            // it makes the errors go away for now though
+            DispatchQueue.main.async {
+                onRes(response)
+            }
+            
         }
     }.resume()
 }

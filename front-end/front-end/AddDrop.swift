@@ -10,7 +10,8 @@ import SwiftUI
 
 struct AddDropView: View {
     // Declare a state variable to store the list of checkboxes
-    @Binding var classes: Classes
+    @EnvironmentObject var userInfo:UserInfo
+    
     @State var checkboxes: [Checkbox] = []
     
     @State var homeScreen = false
@@ -18,7 +19,7 @@ struct AddDropView: View {
     
     var body: some View {
         if (homeScreen){
-            HomeView(classes: $classes)
+            HomeView()
         }
         else{
             Text("Add and Drop Classes")
@@ -45,22 +46,24 @@ struct AddDropView: View {
                             if (res.status == 200){
                                 if (value){
                                     NotificationManager.instance.scheduleNotification(className: checkbox.class_name, classTime: checkbox.class_time)
-                                    // remove the item with checkbox.class_name from notTaking and move it into taking
-                                    for i in 0..<classes.notTaking.count {
-                                        if (classes.notTaking[i].class_name == checkbox.class_name && classes.notTaking[i].class_time == checkbox.class_time){
-                                            classes.taking.append(classes.notTaking.remove(at: i))
-                                            break
-                                        }
-                                    }
+                                    userInfo.addClass(className: checkbox.class_name, classTime: checkbox.class_time)
+//                                    // remove the item with checkbox.class_name from notTaking and move it into taking
+//                                    for i in 0..<userInfo.classes.notTaking.count {
+//                                        if (userInfo.classes.notTaking[i].class_name == checkbox.class_name && userInfo.classes.notTaking[i].class_time == checkbox.class_time){
+//                                            userInfo.classes.taking.append(userInfo.classes.notTaking.remove(at: i))
+//                                            break
+//                                        }
+//                                    }
                                 }
                                 else{
                                     NotificationManager.instance.removeNotification(className: checkbox.class_name, classTime: checkbox.class_time)
-                                    for i in 0..<classes.taking.count {
-                                        if (classes.taking[i].class_name == checkbox.class_name && classes.taking[i].class_time == checkbox.class_time){
-                                            classes.notTaking.append(classes.taking.remove(at: i))
-                                            break
-                                        }
-                                    }
+                                    userInfo.dropClass(className: checkbox.class_name, classTime: checkbox.class_time)
+//                                    for i in 0..<userInfo.classes.taking.count {
+//                                        if (userInfo.classes.taking[i].class_name == checkbox.class_name && userInfo.classes.taking[i].class_time == checkbox.class_time){
+//                                            userInfo.classes.notTaking.append(userInfo.classes.taking.remove(at: i))
+//                                            break
+//                                        }
+//                                    }
                                 }
                             }
                         }
@@ -68,10 +71,10 @@ struct AddDropView: View {
                 }
             }
             .onAppear {
-                checkboxes = classes.taking.map { my_class in
+                checkboxes = userInfo.classes.taking.map { my_class in
                     Checkbox(class_name: my_class.class_name, class_time: my_class.class_time, isChecked: true)
                 }
-                checkboxes.append(contentsOf: classes.notTaking.map { my_class in
+                checkboxes.append(contentsOf: userInfo.classes.notTaking.map { my_class in
                     Checkbox(class_name: my_class.class_name, class_time: my_class.class_time, isChecked: false)
                 })
              }
