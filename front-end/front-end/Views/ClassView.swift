@@ -15,11 +15,10 @@ struct ClassView: View {
     @Binding var myClass: Class
     
     @State var lectures: [Lecture] = []
+    @State var homeView = false;
     
     @EnvironmentObject var router: Router
     
-    
-    @State var homeView = false;
     
     var body: some View {
         Text(myClass.class_name)
@@ -44,10 +43,8 @@ struct ClassView: View {
                 Text("Classes")
             })
         .onAppear{
-            print("classview")
-            httpReq(method: "GET", body: "", route: "classes/" + myClass.class_name + "/" + myClass.class_time) { lecturesResponse in
-                let res = getLecturesResponse(response: lecturesResponse)
-                lectures = res.lectures
+            httpReq(method: "GET", body: "", route: "classes/\(myClass.class_name)/\(myClass.class_time)", as: LecturesResponse.self) { lecturesResponse in
+                lectures = lecturesResponse.lectures
             }
         }
     }

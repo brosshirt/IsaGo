@@ -8,25 +8,13 @@
 import SwiftUI
 import Auth0
 
-// this is just a simplified version of the response to get /classes, it represents the data needed to display the first couple views
-struct Classes {
-    var taking: [Class]
-    var notTaking: [Class]
-    
-    init(taking: [Class], notTaking: [Class]) {
-        self.taking = taking
-        self.notTaking = notTaking
-    }
-}
-
-
 
 
 struct ContentView: View {
     
     @State var homeview = false
     
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) var colorScheme // dark mode
     
     @EnvironmentObject var userInfo:UserInfo
 
@@ -44,22 +32,35 @@ struct ContentView: View {
                         
                         case.success(let credentials):
                             let profile = Profile.from(credentials.idToken)
-                            print(profile.email.substring(start: 0, end: 6))
                             let body = """
                             {
                                 "name": "\(profile.email.substring(start: 0, end: 6))"
                             }
-                            """
-                            httpReq(method: "POST", body: body, route: "login") { loginResponse in
-                                let res = getEmptyResponse(response: loginResponse)
-                                if (res.status == 200){
-                                    httpReq(method: "GET", body: "", route: "classes") { classesResponse in
-                                        let res = getClassesResponse(response: classesResponse)
-                                        userInfo.updateClasses(taking: res.taking, notTaking: res.notTaking)
-                                        homeview = true
-                                    }
+                            """ // I know this way of defining objects seems really stupid but after looking at the alternatives its not so bad
+                            httpReq(method: "POST", body: body, route: "login", as: EmptyResponse.self){ loginResponse in
+                                httpReq(method: "GET", body: "", route: "classes", as: ClassesResponse.self){ classesResponse in
+                                    userInfo.updateClasses(taking: classesResponse.taking, notTaking: classesResponse.notTaking)
+                                    homeview = true
                                 }
                             }
+                        
+                        
+                        
+//                            httpReq(method: "POST", body: body, route: "login") { loginResponse in
+//                                let res = getEmptyResponse(response: loginResponse)
+//                                if parseResponse(response: loginResponse, as: EmptyResponse.self) != nil {
+//                                    httpReq(method: "GET", body: "", route: "classes") { classesResponse in
+//                                        let res = getClassesResponse(response: classesResponse)
+//                                        userInfo.updateClasses(taking: res.taking, notTaking: res.notTaking)
+//                                        homeview = true
+//                                    }
+//                                } else if let res = parseResponse(response: loginResponse, as: ErrorResponse.self) {
+//                                    print(res.msg) // this should be printed to the user probably
+//                                } else {
+//                                    print("Idek man the backend is sending me some nonsense")
+//                                }
+//
+//                            }
                         
                     }
                 }

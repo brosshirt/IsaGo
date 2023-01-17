@@ -39,9 +39,8 @@ struct FeedbackView: View {
                     ).onChange(of: selectedClass) { value in
                         selectedLesson = "None"
                         if value != "None" {
-                            httpReq(method: "GET", body: "", route: "classes/" + selectedClass) { lessonsResponse in
-                                let res = getLessonsResponse(response: lessonsResponse)
-                                lessons = res.lessons
+                            httpReq(method: "GET", body: "", route: "classes/\(selectedClass)", as: LessonsResponse.self) { lessonsResponse in
+                                lessons = lessonsResponse.lessons
                             }
                         }
                     }
@@ -80,9 +79,8 @@ struct FeedbackView: View {
             .navigationTitle("Feedback")
             .onAppear{
                 if selectedClass != "None" {
-                    httpReq(method: "GET", body: "", route: "classes/" + selectedClass) { lessonsResponse in
-                        let res = getLessonsResponse(response: lessonsResponse)
-                        lessons = res.lessons
+                    httpReq(method: "GET", body: "", route: "classes/\(selectedClass)", as: LessonsResponse.self) { lessonsResponse in
+                        lessons = lessonsResponse.lessons
                     }
                 }
             }
@@ -110,12 +108,7 @@ func submitFeedback(selectedClass: String, selectedLesson: String, feedback: Str
         "feedback": "\(feedback)"
     }
     """
-    httpReq(method: "POST", body: body, route: "feedback") { emptyResponse in
-        let res = getEmptyResponse(response: emptyResponse)
-        if (res.status != 200){
-            print("We've got a problem")
-        }
-    }
+    httpReq(method: "POST", body: body, route: "feedback", as: EmptyResponse.self) { emptyResponse in } // no need to do anything w res
 }
 
 //struct FeedbackView_Previews: PreviewProvider {

@@ -41,30 +41,14 @@ struct AddDropView: View {
                             "class_time": "\(checkbox.class_time)"
                         }
                         """
-                        httpReq(method: value ? "POST" : "DELETE", body: body, route: "classes") { response in
-                            let res = getEmptyResponse(response: response)
-                            if (res.status == 200){
-                                if (value){
-                                    NotificationManager.instance.scheduleNotification(className: checkbox.class_name, classTime: checkbox.class_time)
-                                    userInfo.addClass(className: checkbox.class_name, classTime: checkbox.class_time)
-//                                    // remove the item with checkbox.class_name from notTaking and move it into taking
-//                                    for i in 0..<userInfo.classes.notTaking.count {
-//                                        if (userInfo.classes.notTaking[i].class_name == checkbox.class_name && userInfo.classes.notTaking[i].class_time == checkbox.class_time){
-//                                            userInfo.classes.taking.append(userInfo.classes.notTaking.remove(at: i))
-//                                            break
-//                                        }
-//                                    }
-                                }
-                                else{
-                                    NotificationManager.instance.removeNotification(className: checkbox.class_name, classTime: checkbox.class_time)
-                                    userInfo.dropClass(className: checkbox.class_name, classTime: checkbox.class_time)
-//                                    for i in 0..<userInfo.classes.taking.count {
-//                                        if (userInfo.classes.taking[i].class_name == checkbox.class_name && userInfo.classes.taking[i].class_time == checkbox.class_time){
-//                                            userInfo.classes.notTaking.append(userInfo.classes.taking.remove(at: i))
-//                                            break
-//                                        }
-//                                    }
-                                }
+                        httpReq(method: value ? "POST" : "DELETE", body: body, route: "classes", as: EmptyResponse.self) { response in
+                            if (value){
+                                NotificationManager.instance.scheduleNotification(className: checkbox.class_name, classTime: checkbox.class_time)
+                                userInfo.addClass(className: checkbox.class_name, classTime: checkbox.class_time)
+                            }
+                            else{
+                                NotificationManager.instance.removeNotification(className: checkbox.class_name, classTime: checkbox.class_time)
+                                userInfo.dropClass(className: checkbox.class_name, classTime: checkbox.class_time)
                             }
                         }
                     }

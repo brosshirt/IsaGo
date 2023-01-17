@@ -15,7 +15,7 @@ func sanitizeRoute(route: String) -> String{
     return route.replacingOccurrences(of: " ", with: "%20")
 }
 
-func httpReq(method: String, body: String, route: String, onRes: @escaping (String) -> Void) -> Void {
+func httpReq<T: Codable>(method: String, body: String, route: String, as type: T.Type, onRes: @escaping (T) -> Void) -> Void {
     let santizedRoute = sanitizeRoute(route: route)
     
     let url = URL(string: backendURL + santizedRoute)!
@@ -33,10 +33,21 @@ func httpReq(method: String, body: String, route: String, onRes: @escaping (Stri
         if let data = data, let response = String(data: data, encoding: .utf8){
             // this is overkill, I've yet to figure out how to handle this 'modifying objects from the background issue'
             // it makes the errors go away for now though
-            DispatchQueue.main.async {
-                onRes(response)
+//            DispatchQueue.main.async {
+//                onRes(response)
+//            }
+            if let res = parseResponse(response: response, as: T.self) {
+                DispatchQueue.main.async{
+                    onRes(res)
+                }
+            } else if let res = parseResponse(response: response, as: ErrorResponse.self) {
+                print(res.msg) // in the future we want to print out this error to the screen by modifying some state variable
+            } else {
+                print("Idek man the backend is sending me some nonsense")
             }
-            
+        }
+        else{
+            print("Response was bad, I dunno") // need to play around more and see what goes in here
         }
     }.resume()
 }
