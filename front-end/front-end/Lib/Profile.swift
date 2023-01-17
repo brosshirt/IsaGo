@@ -9,6 +9,8 @@ import Foundation
 
 import JWTDecode
 
+
+// I hope nobody ever has to look at this code ever, it just exists for Auth0
 struct Profile{
     
     let id: String
@@ -46,8 +48,6 @@ extension Profile {
         }
         
         return Profile(id: id, name: name, email: email, emailVerified: String(describing: emailVerified), picture: picture, updatedAt: updatedAt)
-        
-        
     }
     
     

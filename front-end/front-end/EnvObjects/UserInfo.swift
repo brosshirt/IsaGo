@@ -8,20 +8,6 @@
 import Foundation
 
 
-
-// this is just a simplified version of the response to get /classes, it represents the data needed to display the first couple views
-struct Classes {
-    var taking: [Class]
-    var notTaking: [Class]
-    
-    init(taking: [Class], notTaking: [Class]) {
-        self.taking = taking
-        self.notTaking = notTaking
-    }
-}
-
-
-
 // this object contains all the necessary user information such that it can be accessed by any view without having to be passed around
 
 // Any operation that modifies a state object must take place on the main thread. @MainActor is supposed to ensure this.
@@ -52,6 +38,18 @@ struct Classes {
                 break
             }
         }
+    }
+}
+
+
+// this is just a simplified version of the response to get /classes, it represents the data needed to display the first couple views
+struct Classes {
+    var taking: [Class]
+    var notTaking: [Class]
+    
+    init(taking: [Class], notTaking: [Class]) {
+        self.taking = taking
+        self.notTaking = notTaking
     }
 }
 

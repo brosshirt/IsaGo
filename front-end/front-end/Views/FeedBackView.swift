@@ -11,13 +11,12 @@ struct FeedbackView: View {
     @EnvironmentObject var userInfo:UserInfo
         
     @State var feedback = ""
-
-    @State var lessons: [Lesson] = []
+    @State var lessons: [Lesson] = [] // gets filled when a user has selected a class
+    
+    @State var selectedClass: String // either initialized to "None" or the name of the class
+    @State var selectedLesson: String
     
     @State var submitted = false;
-    
-    @State var selectedClass: String
-    @State var selectedLesson: String
 
     var body: some View {
         NavigationView{
@@ -28,8 +27,7 @@ struct FeedbackView: View {
                         label:
                             HStack{
                                 Text("Class in reference to: ")
-                            }
-                        ,
+                            },
                         content: {
                             Text("None").tag("None")
                             ForEach(removeDuplicateClasses(classes: userInfo.classes.taking), id: \.self) { myClass in
@@ -50,8 +48,7 @@ struct FeedbackView: View {
                             label:
                                 HStack{
                                     Text("Lesson in reference to: ")
-                                }
-                            ,
+                                },
                             content: {
                                 Text("None").tag("None")
                                 ForEach(lessons, id: \.self) { lesson in
@@ -78,7 +75,7 @@ struct FeedbackView: View {
             }
             .navigationTitle("Feedback")
             .onAppear{
-                if selectedClass != "None" {
+                if selectedClass != "None" { // if you come from the lessonView then selectedClass will be autofilled
                     httpReq(method: "GET", body: "", route: "classes/\(selectedClass)", as: LessonsResponse.self) { lessonsResponse in
                         lessons = lessonsResponse.lessons
                     }
@@ -94,7 +91,7 @@ struct FeedbackView: View {
                     .opacity(0.7)
                     .padding()
             }
-            .opacity(submitted ? 1 : 0)
+            .opacity(submitted ? 1 : 0) // invisible when submitted is false
         }
         
     }

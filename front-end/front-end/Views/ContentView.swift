@@ -18,7 +18,6 @@ struct ContentView: View {
     
     @EnvironmentObject var userInfo:UserInfo
 
-    
     var body: some View {
         if (homeview){
             HomeView()
@@ -27,9 +26,8 @@ struct ContentView: View {
             Button(action: {
                 Auth0.webAuth().start{ result in
                     switch result{
-                        case.failure(let error):
+                        case.failure(let error): // if the auth fails, idk why it would, just sign in again?
                             print(error)
-                        
                         case.success(let credentials):
                             let profile = Profile.from(credentials.idToken)
                             let body = """
@@ -43,25 +41,6 @@ struct ContentView: View {
                                     homeview = true
                                 }
                             }
-                        
-                        
-                        
-//                            httpReq(method: "POST", body: body, route: "login") { loginResponse in
-//                                let res = getEmptyResponse(response: loginResponse)
-//                                if parseResponse(response: loginResponse, as: EmptyResponse.self) != nil {
-//                                    httpReq(method: "GET", body: "", route: "classes") { classesResponse in
-//                                        let res = getClassesResponse(response: classesResponse)
-//                                        userInfo.updateClasses(taking: res.taking, notTaking: res.notTaking)
-//                                        homeview = true
-//                                    }
-//                                } else if let res = parseResponse(response: loginResponse, as: ErrorResponse.self) {
-//                                    print(res.msg) // this should be printed to the user probably
-//                                } else {
-//                                    print("Idek man the backend is sending me some nonsense")
-//                                }
-//
-//                            }
-                        
                     }
                 }
             }) {

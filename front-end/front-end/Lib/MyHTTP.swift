@@ -15,14 +15,17 @@ func sanitizeRoute(route: String) -> String{
     return route.replacingOccurrences(of: " ", with: "%20")
 }
 
-func httpReq<T: Codable>(method: String, body: String, route: String, as type: T.Type, onRes: @escaping (T) -> Void) -> Void {
+
+
+// Takes req information, makes req, parses it into appropriate object (with error handling), and then calls onRes on the parsed response
+func httpReq<T: Codable>(method: String, body: String, route: String, as type: T.Type, onRes: @escaping (T) -> Void){
     let santizedRoute = sanitizeRoute(route: route)
     
     let url = URL(string: backendURL + santizedRoute)!
     var req = URLRequest(url: url)
     req.httpMethod = method
     req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    req.httpBody = body == "" ? Data() : (body.data(using: .utf8))!
+    req.httpBody = body == "" ? Data() : (body.data(using: .utf8))! // I really ought to be able to just send the string as it is
     
     URLSession.shared.uploadTask(with: req, from: req.httpBody){ data, response, error in
         if let error = error {
@@ -31,12 +34,9 @@ func httpReq<T: Codable>(method: String, body: String, route: String, as type: T
         }
         
         if let data = data, let response = String(data: data, encoding: .utf8){
-            // this is overkill, I've yet to figure out how to handle this 'modifying objects from the background issue'
-            // it makes the errors go away for now though
-//            DispatchQueue.main.async {
-//                onRes(response)
-//            }
             if let res = parseResponse(response: response, as: T.self) {
+                // this is overkill, I've yet to figure out how to handle this 'modifying objects from the background issue'
+                // it makes the errors go away for now though
                 DispatchQueue.main.async{
                     onRes(res)
                 }

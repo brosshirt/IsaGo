@@ -50,8 +50,7 @@ struct HomeView: View {
                 }
             )
             .onAppear{
-                print(userInfo.classes.taking)
-                if !hasLoaded.hasLoaded{
+                if !hasLoaded.hasLoaded{ // add all the local notifications for the user upon the view load, just in case they added a class on another device
                     UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                     for myClass in userInfo.classes.taking{
                         NotificationManager.instance.scheduleNotification(className: myClass.class_name, classTime: myClass.class_time)
@@ -63,7 +62,7 @@ struct HomeView: View {
         
     }
 }
-
+// Our goal is to only print class names, not classtimes, so we don't want to repeat class names.
 func removeDuplicateClasses(classes: [Class]) -> [Class]{
     var output: [Class] = []
     for section in classes{

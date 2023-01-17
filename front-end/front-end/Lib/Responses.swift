@@ -20,20 +20,6 @@ struct ClassesResponse: Codable {
     }
 }
 
-func getClassesResponse(response:String) -> ClassesResponse{
-    var classesResponse = ClassesResponse(status: 0, taking: [], notTaking: [])
-    print(response)
-    do {
-        let newData = response.data(using: .utf8)!
-        classesResponse = try decoder.decode(ClassesResponse.self, from: newData)
-    }
-    catch{
-        print("Error converting response string to ClassesResponse")
-    }
-    return classesResponse
-}
-
-
 struct EmptyResponse: Codable {
     let status: Int
     
@@ -52,18 +38,6 @@ struct ErrorResponse: Codable {
     }
 }
 
-func getEmptyResponse(response:String) -> EmptyResponse{
-    var emptyResponse = EmptyResponse(status: 0)
-    do {
-        let newData = response.data(using: .utf8)!
-        emptyResponse = try decoder.decode(EmptyResponse.self, from: newData)
-    }
-    catch{
-        print("Error converting response string to EmptyResponse")
-    }
-    return emptyResponse
-}
-
 struct LecturesResponse: Codable {
     let status: Int
     let lectures: [Lecture]
@@ -74,19 +48,6 @@ struct LecturesResponse: Codable {
     }
 }
 
-func getLecturesResponse(response:String) -> LecturesResponse{
-    var lecturesResponse = LecturesResponse(status: 0, lessons: [])
-    do {
-        let newData = response.data(using: .utf8)!
-        lecturesResponse = try decoder.decode(LecturesResponse.self, from: newData)
-    }
-    catch{
-        print("Error converting response string to LecturesResponse")
-        print(error)
-    }
-    return lecturesResponse
-}
-
 struct LessonsResponse: Codable {
     let status: Int
     let lessons: [Lesson]
@@ -95,19 +56,6 @@ struct LessonsResponse: Codable {
         self.status = status
         self.lessons = lessons
     }
-}
-
-func getLessonsResponse(response:String) -> LessonsResponse{
-    var lessonResponse = LessonsResponse(status: 0, lessons: [])
-    do {
-        let newData = response.data(using: .utf8)!
-        lessonResponse = try decoder.decode(LessonsResponse.self, from: newData)
-    }
-    catch{
-        print("Error converting response string to LecturesResponse")
-        print(error)
-    }
-    return lessonResponse
 }
 
 // generic function for turning a response into the object we're looking for

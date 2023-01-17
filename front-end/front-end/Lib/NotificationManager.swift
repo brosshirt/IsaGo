@@ -8,6 +8,9 @@
 import Foundation
 import UserNotifications
 
+
+
+// Incredibly verbose way of handling local notifications. Gets the job done.
 class NotificationManager{
     static let instance = NotificationManager()
     
@@ -21,24 +24,19 @@ class NotificationManager{
             }
         }
     }
-    
+    // takes a className and classTime and creates however many notification requests are needed
     func scheduleNotification(className: String, classTime: String){
         let content = UNMutableNotificationContent()
         content.title = "\(className) starting in 15 minutes!"
         content.subtitle = "Tap to quickly view today's summary"
         content.sound = .default
         
-        let dateComponentsArray = dateComponents(from: classTime)
+        let dateComponentsArray = dateComponents(from: classTime) // this is necessary because you need to split it based off days of the week
 
         for dateComponents in dateComponentsArray{
-            print("weekday: \(dateComponents.weekday!)")
-            print("hour: \(dateComponents.hour!)")
-            print("minute: \(dateComponents.minute!)")
-
-
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
             let request = UNNotificationRequest(
-                identifier: className + classTime,
+                identifier: className + classTime, // requests for the same section has the same identifier
                 content: content,
                 trigger: trigger)
             UNUserNotificationCenter.current().add(request)
@@ -56,6 +54,7 @@ class NotificationManager{
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [className + classTime])
     }
     
+    // Turns MWF-1000 into three date component objects that represent weekly notifications at 9:45am on Monday, Wednesday, Friday
     func dateComponents(from schedule: String) -> [DateComponents] {
         let days = ["M": 2, "T": 3, "W": 4, "R": 5, "F": 6, "S": 7, "U": 1]
         let scheduleComponents = schedule.split(separator: "-")
@@ -81,8 +80,6 @@ class NotificationManager{
                 dateComponents.hour = hour
                 dateComponents.minute = minute! - 15
             }
-
-            
             dateComponentsArray.append(dateComponents)
         }
         return dateComponentsArray

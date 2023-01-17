@@ -12,13 +12,11 @@ import Foundation
 
 
 struct ClassView: View {
-    @Binding var myClass: Class
+    @Binding var myClass: Class // the class being viewed
     
-    @State var lectures: [Lecture] = []
-    @State var homeView = false;
+    @State var lectures: [Lecture] = [] // the lectures for the class
     
     @EnvironmentObject var router: Router
-    
     
     var body: some View {
         Text(myClass.class_name)
@@ -49,11 +47,6 @@ struct ClassView: View {
         }
     }
 }
-
-
-
-
-
 
 //struct ClassView_Previews: PreviewProvider {
 //    static var previews: some View {

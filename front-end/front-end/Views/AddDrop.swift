@@ -9,11 +9,9 @@ import SwiftUI
 
 
 struct AddDropView: View {
-    // Declare a state variable to store the list of checkboxes
     @EnvironmentObject var userInfo:UserInfo
     
     @State var checkboxes: [Checkbox] = []
-    
     @State var homeScreen = false
     
     
@@ -26,7 +24,6 @@ struct AddDropView: View {
                 .font(.largeTitle)
             List($checkboxes) { $checkbox in
                 HStack {
-                    // Use a Toggle to create the checkbox
                     Toggle(isOn: $checkbox.isChecked){
                         HStack {
                             Text(checkbox.class_name)

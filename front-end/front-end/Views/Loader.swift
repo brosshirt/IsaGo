@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// page that has a spinner, should be refactored if we want to use it on multiple pages.
 struct Loader: View {
     
     @State var animate = false
@@ -21,7 +22,7 @@ struct Loader: View {
                     .frame(width: 45, height: 45)
                     .rotationEffect(.init(degrees: self.animate ? 360 : 0))
                     .padding(.top, 10)
-                Text("Lesson loading...")
+                Text("Lesson loading...") // Lesson should be a variabe you pass in so it's more flexible
             }
             .onAppear{
                 withAnimation(Animation.linear(duration: 0.7).repeatForever(autoreverses: false)) {

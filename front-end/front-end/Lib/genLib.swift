@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+// ChatGPT wrote me a substring function 
 extension String {
     func substring(start: Int, end: Int) -> String {
         let startIndex = self.index(self.startIndex, offsetBy: start)
