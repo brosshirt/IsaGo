@@ -34,12 +34,6 @@ struct ClassView: View {
         .navigationDestination(for: Lecture.self) { lecture in
             LessonView(lesson: .constant(lecture))
         }
-        .navigationBarItems(trailing:
-            Button(action: {
-                router.reset()
-            }) {
-                Text("Classes")
-            })
         .onAppear{
             httpReq(method: "GET", body: "", route: "classes/\(myClass.class_name)/\(myClass.class_time)", as: LecturesResponse.self) { lecturesResponse in
                 lectures = lecturesResponse.lectures

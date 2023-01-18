@@ -32,3 +32,11 @@ func timeString(class_time: String) -> String{
     
     return "\(daysOfWeek)-\(hour!):\(minute)"
 }
+
+func printTime() {
+    let date = Date()
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    let currentTime = dateFormatter.string(from: date)
+    print("Current Time: \(currentTime)")
+}

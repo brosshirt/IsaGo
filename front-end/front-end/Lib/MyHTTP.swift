@@ -35,11 +35,7 @@ func httpReq<T: Codable>(method: String, body: String, route: String, as type: T
         
         if let data = data, let response = String(data: data, encoding: .utf8){
             if let res = parseResponse(response: response, as: T.self) {
-                // this is overkill, I've yet to figure out how to handle this 'modifying objects from the background issue'
-                // it makes the errors go away for now though
-                DispatchQueue.main.async{
-                    onRes(res)
-                }
+                onRes(res)
             } else if let res = parseResponse(response: response, as: ErrorResponse.self) {
                 print(res.msg) // in the future we want to print out this error to the screen by modifying some state variable
             } else {

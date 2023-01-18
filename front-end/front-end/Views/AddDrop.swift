@@ -60,8 +60,6 @@ struct AddDropView: View {
                 })
              }
         }
-        
-        
     }
 }
 

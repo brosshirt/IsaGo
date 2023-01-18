@@ -10,31 +10,38 @@ import Foundation
 
 // this object contains all the necessary user information such that it can be accessed by any view without having to be passed around
 
-// Any operation that modifies a state object must take place on the main thread. @MainActor is supposed to ensure this.
-@MainActor class UserInfo: ObservableObject{
+// ANY OPERATION THAT MODIFIES A STATE OBJECT MUST TAKE PLACE ON THE MAIN THREAD
+// @MainActor is supposed to be a way of ensuring that all code takes place on the mainthread, but it's not removing all errors, so for now I'm just going to throw critical code in .main.async
+class UserInfo: ObservableObject{
     @Published var classes: Classes = Classes(taking: [], notTaking: [])
     
     @Published var student_id: String = ""
     
-    @MainActor func updateClasses(taking: [Class], notTaking: [Class]){
-        self.classes.taking = taking
-        self.classes.notTaking = notTaking
+    func updateClasses(taking: [Class], notTaking: [Class]){
+        DispatchQueue.main.async{
+            self.classes.taking = taking
+            self.classes.notTaking = notTaking
+        }
     }
     // just moves the class with className and classTime from taking into notTaking
-        
-    @MainActor func dropClass(className: String, classTime:String){
+    // I suppose it could be possible that it's actual more performant to throw the whole thing in main.async?? 
+    func dropClass(className: String, classTime:String){
         for i in 0..<self.classes.taking.count {
             if (self.classes.taking[i].class_name == className && self.classes.taking[i].class_time == classTime){
-                self.classes.notTaking.append(self.classes.taking.remove(at: i))
+                DispatchQueue.main.async{
+                    self.classes.notTaking.append(self.classes.taking.remove(at: i))
+                }
                 break
             }
         }
     }
     
-    @MainActor func addClass(className:String, classTime: String){
+    func addClass(className:String, classTime: String){
         for i in 0..<self.classes.notTaking.count {
             if (self.classes.notTaking[i].class_name == className && self.classes.notTaking[i].class_time == classTime){
-                self.classes.taking.append(self.classes.notTaking.remove(at: i))
+                DispatchQueue.main.async{
+                    self.classes.taking.append(self.classes.notTaking.remove(at: i))
+                }
                 break
             }
         }
