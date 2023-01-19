@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
 
 router.get('/', (req, res) => {
     console.log("/classes is being touched by " + req.session.student_id);
@@ -40,6 +39,46 @@ router.get('/', (req, res) => {
         })
 })
 
+router.post('/', (req,res) => {
+    console.log(req.session.student_id + " is trying to add the section " + req.body.class_name + " taught at " + req.body.class_time)
+
+    const query = `insert into takes values ($1,$2,$3)`
+
+    const values = [req.session.student_id, req.body.class_name, req.body.class_time]
+
+    db.query(query, values).then(data => {
+        res.send({
+            status: 200
+        })
+    }).catch(err => {
+        console.log(err)
+        res.send({
+            status: 400,
+            msg: "An error has occured adding a class"
+        })
+    })
+})
+
+router.delete('/', (req,res) => {
+    console.log(req.session.student_id + " is trying to delete the section " + req.body.class_name + "taught at " + req.body.class_time)
+    
+    const query = `delete from takes where student_id = $1 and class_name = $2 and class_time = $3`
+
+    const values = [req.session.student_id, req.body.class_name, req.body.class_time]
+
+
+    db.query(query, values).then(data => {
+        res.send({
+            status: 200
+        })
+    }).catch(err => {
+        console.log(err)
+        res.send({
+            status: 400,
+            msg: "An error has occured removing a class"
+        })
+    })
+})
 
 router.get('/:class_name', (req, res) => {
     console.log("/:class_name is being touched by " + req.session.student_id);
@@ -61,7 +100,7 @@ router.get('/:class_name', (req, res) => {
             console.log(err)
             res.send({
                 status: 400,
-                msg: "An error has retrieving " + req.params.class_name
+                msg: "An error has occurred retrieving " + req.params.class_name
             })
         })
 })
@@ -93,50 +132,8 @@ router.get('/:class_name/:class_time', (req, res) => {
 })
 
 
-router.post('/', (req,res) => {
-    console.log(req.session.student_id + " is trying to add the section " + req.body.class_name + " taught at " + req.body.class_time)
-
-    const query = `insert into takes values ($1,$2,$3)`
-
-    const values = [req.session.student_id, req.body.class_name, req.body.class_time]
 
 
-    db.query(query, values).then(data => {
-        res.send({
-            status: 200
-        })
-    }).catch(err => {
-        console.log(err)
-        res.send({
-            status: 400,
-            msg: "An error has occured adding a class"
-        })
-    })
-    
-})
-
-router.delete('/', (req,res) => {
-    console.log(req.session.student_id + " is trying to delete the section " + req.body.class_name + "taught at " + req.body.class_time)
-    
-    const query = `delete from takes where student_id = $1 and class_name = $2 and class_time = $3`
-
-    const values = [req.session.student_id, req.body.class_name, req.body.class_time]
-
-
-    db.query(query, values).then(data => {
-        res.send({
-            status: 200
-        })
-    }).catch(err => {
-        console.log(err)
-        res.send({
-            status: 400,
-            msg: "An error has occured removing a class"
-        })
-    })
-    
-    
-})
 
 module.exports = router;
 

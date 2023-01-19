@@ -45,15 +45,10 @@ struct LessonView: View {
         if isLoading{
             Loader()
                 .onAppear{
-                    let url = URL(string: s3Url(class_name: lesson.class_name, lesson_name: lesson.lesson_name))!
-                    URLSession.shared.dataTask(with: url) { data, response, error in
-                        if let data = data, error == nil {
-                            pdfDocument = PDFDocument(data: data)!
-                            isLoading = false
-                        } else {
-                            print("Error fetching pdf data: \(error!)")
-                        }
-                    }.resume()
+                    getPDF(className: lesson.class_name, lessonName: lesson.lesson_name) { data in
+                        pdfDocument = PDFDocument(data: data)!
+                        isLoading = false
+                    }
                 }
         }
         else{
@@ -69,9 +64,6 @@ struct LessonView: View {
     }
 }
 
-func s3Url(class_name:String, lesson_name: String) -> String {
-    return sanitizeRoute(route: "https://s3.amazonaws.com/isago-lessons/\(class_name)/\(lesson_name).pdf")
-}
 
 //struct LessonView_Previews: PreviewProvider {
 //    static var previews: some View {

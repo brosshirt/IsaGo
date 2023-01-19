@@ -8,7 +8,7 @@
 import SwiftUI
 import Auth0
 
-
+import JWTDecode
 
 struct ContentView: View {
     
@@ -29,10 +29,18 @@ struct ContentView: View {
                         case.failure(let error): // if the auth fails, idk why it would, just sign in again?
                             print(error)
                         case.success(let credentials):
-                            let profile = Profile.from(credentials.idToken)
+                            print(credentials.idToken)
+                            guard
+                                let jwt = try? decode(jwt: credentials.idToken),
+                                let email = jwt.claim(name: "email").string
+                            else{
+                                print("There's an error interpreting the result of the apple/google sign in")
+                                return
+                            }
+                            print(email)
                             let body = """
                             {
-                                "name": "\(profile.email.substring(start: 0, end: 6))"
+                                "name": "\(email.substring(start: 0, end: 6))"
                             }
                             """ // I know this way of defining objects seems really stupid but after looking at the alternatives its not so bad
                             httpReq(method: "POST", body: body, route: "login", as: EmptyResponse.self){ loginResponse in

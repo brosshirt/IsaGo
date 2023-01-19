@@ -10,7 +10,7 @@ import Foundation
 import JWTDecode
 
 
-// I hope nobody ever has to look at this code ever, it just exists for Auth0
+// this code is never used, I'm just keeping it, if I want, it's useful for decoding the entire google jwt into a profile
 struct Profile{
     
     let id: String

@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
 
 
 
@@ -10,12 +9,13 @@ router.post('/', (req, res) => {
 
     const query = `INSERT INTO student(student_id)
     VALUES ($1)
-    ON CONFLICT (student_id) DO NOTHING;`
+    ON CONFLICT (student_id) DO NOTHING;` // Does this mean that it's literally impossible for this db operation to fail? That's a problem
 
     const values = [req.body.name]
 
 
     db.query(query, values).then(data => {
+        req.session.student_id = req.body.name
         res.send({
             status: 200
         })
@@ -25,12 +25,9 @@ router.post('/', (req, res) => {
             status: 400,
             msg: "login failed"
         })
-
-    })
-
-    req.session.student_id = req.body.name
-    
-    
+    }) 
 })
+
+
 
 module.exports = router;
