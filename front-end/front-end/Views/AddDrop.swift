@@ -11,13 +11,16 @@ import SwiftUI
 struct AddDropView: View {
     @EnvironmentObject var userInfo:UserInfo
     
+    @EnvironmentObject var router:Router
+    
     @State var checkboxes: [Checkbox] = []
-    @State var homeScreen = false
+    
+    @State var logout = false
     
     
     var body: some View {
-        if (homeScreen){
-            HomeView()
+        if (logout){
+            ContentView()
         }
         else{
             Text("Add and Drop Classes")
@@ -59,6 +62,19 @@ struct AddDropView: View {
                     Checkbox(class_name: my_class.class_name, class_time: my_class.class_time, isChecked: false)
                 })
              }
+            Button(action: {
+                httpReq(method: "DELETE", body: "", route: "account", as: EmptyResponse.self) { response in
+                    DispatchQueue.main.async{ // overkill probably but better safe than sorry
+                        router.reset()
+                        userInfo.updateClasses(taking: [], notTaking: [])
+                        logout = true
+                    }
+                }
+            }, label: {
+                Text("Delete your account")
+                    .font(.system(size: 22))
+                    .padding(10)
+            })
         }
     }
 }

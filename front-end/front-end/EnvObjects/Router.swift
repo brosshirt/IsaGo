@@ -7,6 +7,7 @@
 
 import SwiftUI
 // Object that controls your navigation
+
 class Router: ObservableObject{
     // Once I get more comfortable with this I'd like to be able to manipulate the path however I want, it's just a list of... views? (I guess)
     @Published var path = NavigationPath()

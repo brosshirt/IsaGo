@@ -24,30 +24,11 @@ app.use(session({
 }));
 
 
-app.delete('account', (req, res) => {
-  const query = `DELETE FROM student WHERE student_id = $1;`
-
-    const values = [req.session.student_id]
-    
-    db.query(query, values).then(data => {
-      req.session.student_id = undefined
-      res.send({
-          status: 200
-      })
-    }).catch(err => {
-        console.log(err)
-        res.send({
-            status: 400,
-            msg: "delete account failed"
-        })
-    }) 
-})
- 
 const classesRouter = require("./routes/classes.js");
 app.use('/classes', classesRouter);
 
-const loginRouter = require("./routes/login.js");
-app.use('/login', loginRouter);
+const accountRouter = require("./routes/account.js");
+app.use('/account', accountRouter);
 
 const feedbackRouter = require("./routes/feedback.js");
 app.use('/feedback', feedbackRouter);

@@ -61,7 +61,7 @@ function buildFeedbackTable(db){
         feedback varchar primary key,
         feedback_date timestamp default current_timestamp,
         student_id varchar references student(student_id) on delete cascade,
-          FOREIGN KEY (class_name, lesson_name) REFERENCES lesson (class_name, lesson_name) on delete cascade
+        FOREIGN KEY (class_name, lesson_name) REFERENCES lesson (class_name, lesson_name) on delete cascade
     )
     `)
 }

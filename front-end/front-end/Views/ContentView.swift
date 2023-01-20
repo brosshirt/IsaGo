@@ -43,7 +43,7 @@ struct ContentView: View {
                                 "name": "\(email.substring(start: 0, end: 6))"
                             }
                             """ // I know this way of defining objects seems really stupid but after looking at the alternatives its not so bad
-                            httpReq(method: "POST", body: body, route: "login", as: EmptyResponse.self){ loginResponse in
+                            httpReq(method: "POST", body: body, route: "account", as: EmptyResponse.self){ loginResponse in
                                 httpReq(method: "GET", body: "", route: "classes", as: ClassesResponse.self){ classesResponse in
                                     userInfo.updateClasses(taking: classesResponse.taking, notTaking: classesResponse.notTaking)
                                     homeview = true

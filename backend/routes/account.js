@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 
-
+// this is your login or create account
 router.post('/', (req, res) => {
-    console.log("/login is being touched by " + req.session.student_id);
+    console.log("post /account is being touched by " + req.session.student_id);
     console.log("req.body.name is " + req.body.name)
 
     const query = `INSERT INTO student(student_id)
@@ -27,6 +27,26 @@ router.post('/', (req, res) => {
         })
     }) 
 })
+// delete your account
+router.delete('/', (req, res) => {
+    console.log(req.session.student_id + " tryna delete his account and stuff")
+    const query = `DELETE FROM student WHERE student_id = $1;`
+  
+      const values = [req.session.student_id]
+      
+      db.query(query, values).then(data => {
+        req.session.student_id = undefined
+        res.send({
+            status: 200
+        })
+      }).catch(err => {
+          console.log(err)
+          res.send({
+              status: 400,
+              msg: "delete account failed"
+          })
+      }) 
+  })
 
 
 
