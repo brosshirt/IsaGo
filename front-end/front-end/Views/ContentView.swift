@@ -19,7 +19,7 @@ struct ContentView: View {
     @EnvironmentObject var userInfo:UserInfo
 
     var body: some View {
-        if (homeview){
+        if (userInfo.student_id != ""){
             HomeView()
         }
         else{
@@ -46,7 +46,7 @@ struct ContentView: View {
                             httpReq(method: "POST", body: body, route: "account", as: EmptyResponse.self){ loginResponse in
                                 httpReq(method: "GET", body: "", route: "classes", as: ClassesResponse.self){ classesResponse in
                                     userInfo.updateClasses(taking: classesResponse.taking, notTaking: classesResponse.notTaking)
-                                    homeview = true
+                                    userInfo.student_id = email.substring(start:0, end: 6)
                                 }
                             }
                     }

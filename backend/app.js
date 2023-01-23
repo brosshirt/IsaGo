@@ -7,6 +7,8 @@ require('dotenv').config()
 
 db = dbLib.getDB()
 
+app.set('view engine', 'ejs'); 
+
 
 app.use(require('body-parser').urlencoded({ // this is needed so that req.body isn't undefined
     extended:true
@@ -32,6 +34,9 @@ app.use('/account', accountRouter);
 
 const feedbackRouter = require("./routes/feedback.js");
 app.use('/feedback', feedbackRouter);
+
+const adminRouter = require("./routes/admin.js");
+app.use('/admin', adminRouter);
 
 
 

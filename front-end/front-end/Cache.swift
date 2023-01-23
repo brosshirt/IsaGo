@@ -36,6 +36,10 @@ class Cache: ObservableObject{
     func get(name: String) -> CacheableData? {
         return cache.object(forKey: name as NSString)
     }
+    
+    func removeAll(){
+        cache.removeAllObjects()
+    }
 }
 
 // this is a wrapper around data because NSCache requires a class

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isago | Admin</title>
+    <style>
+        form {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+        }
+        input {
+          margin: 10px 0;
+          padding: 8px;
+          font-size: 1em;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+          background-color: #4CAF50;
+          color: white;
+          cursor: pointer;
+        }
+      </style>
+</head>
+<body>
+    <form action="/admin/lesson" method="post" enctype="multipart/form-data">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <label for="classname">Class Name:</label>
+        <select id="classname" name="classname" required>
+            <option value="MECH 003">MECH 003</option>
+            <option value="ME 104">ME 104</option>
+        </select>
+        <label for="lessonname">Lesson Name:</label>
+        <input type="text" id="lessonname" name="lessonname" required>
+        <label for="lessondate">Lesson Date:</label>
+        <input type="date" id="lessondate" name="lessondate" required>
+        <label for="lessonfile">Lesson File:</label>
+        <input type="file" id="lessonfile" name="lessonfile" required>
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>

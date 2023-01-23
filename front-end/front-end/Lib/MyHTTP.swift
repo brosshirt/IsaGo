@@ -51,7 +51,9 @@ func httpReq<T: Codable>(method: String, body: String, route: String, as type: T
         if let data = data, let response = String(data: data, encoding: .utf8){
             if let res = parseResponse(response: response, as: T.self) {
                 Cache.instance.add(name: cacheName, data: CacheableData(data)) // we don't actually need the status in the cache
-                onRes(res)
+                DispatchQueue.main.async{ //overkill
+                    onRes(res)
+                }
             } else if let res = parseResponse(response: response, as: ErrorResponse.self) {
                 print(res.msg) // in the future we want to print out this error to the screen by modifying some state variable
             } else {

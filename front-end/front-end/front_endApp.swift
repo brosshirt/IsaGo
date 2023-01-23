@@ -16,10 +16,10 @@ struct front_endApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(router)
                 .environmentObject(hasLoaded)
                 .environmentObject(userInfo)
                 .environmentObject(cache)
+                .environmentObject(router)
         }
     }
 }

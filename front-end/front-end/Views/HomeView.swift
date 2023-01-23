@@ -18,7 +18,7 @@ struct HomeView: View {
     @State var lessons: [Lesson] = []
     @State var class_name: String = ""
     
-    @EnvironmentObject var router:Router
+    @EnvironmentObject var router: Router
     @EnvironmentObject var hasLoaded:HasLoaded
     @EnvironmentObject var userInfo:UserInfo
 
