@@ -56,7 +56,7 @@ router.post('/lesson', multer().single('lessonfile'), (req,res) => {
                     console.log(err);
                     return res.send({
                         status: 500,
-                        msg: 'There was an issue uploading your file to s3'
+                        msg: 'There was an issue uploading your file to s3 \n' + err 
                     })
                 }
                 console.log(`File uploaded successfully. ${data.Location}`);
@@ -80,21 +80,21 @@ router.post('/lesson', multer().single('lessonfile'), (req,res) => {
                             console.log(err)
                             return res.send({
                                 status: 500,
-                                msg: "An error occured while adding the lecture information for the section at " + classtimes[1]
+                                msg: "An error occured while adding the lecture information for the section at " + classtimes[1] + '\n' + err 
                             })
                         })
                     }).catch(err => {
                         console.log(err)
                         return res.send({
                             status: 500,
-                            msg: "An error occured while adding the lecture information for the section at " + classtimes[0]
+                            msg: "An error occured while adding the lecture information for the section at " + classtimes[0] + '\n' + err
                         })
                     })
                 }).catch(err => {
                     console.log(err)
                     return res.send({
                         status: 500,
-                        msg: "An error has occured while adding the lesson information"
+                        msg: "An error has occured while adding the lesson information " + '\n' + err
                     })
                 })
             });
