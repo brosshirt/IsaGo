@@ -74,9 +74,11 @@ func getPDF(className: String, lessonName: String, onRes: @escaping (Data) -> Vo
     // check the cache first!
     let cachedData = Cache.instance.get(name: cacheName)
     if (cachedData != nil){ // cache hit!
+        print("it's in the cache")
         onRes(cachedData!.data)
         return
     }
+    print("it's not in the cache")
     
     // cache miss
     
@@ -95,6 +97,7 @@ func getPDF(className: String, lessonName: String, onRes: @escaping (Data) -> Vo
 
 func s3Url(class_name:String, lesson_name: String) -> String {
     return sanitizeRoute(route: "https://s3.amazonaws.com/isago-lessons/\(class_name)/\(lesson_name).pdf")
+//    return sanitizeRoute(route: "https://isago-lessons.s3.amazonaws.com/\(class_name)/\(lesson_name).pdf") this is for the ohio s3 server
 }
 
 
