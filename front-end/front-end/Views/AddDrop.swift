@@ -41,11 +41,9 @@ struct AddDropView: View {
                     """
                     httpReq(method: value ? "POST" : "DELETE", body: body, route: "classes", as: EmptyResponse.self) { response in
                         if (value){
-                            NotificationManager.instance.scheduleNotification(className: checkbox.class_name, classTime: checkbox.class_time)
                             userInfo.addClass(className: checkbox.class_name, classTime: checkbox.class_time)
                         }
                         else{
-                            NotificationManager.instance.removeNotification(className: checkbox.class_name, classTime: checkbox.class_time)
                             userInfo.dropClass(className: checkbox.class_name, classTime: checkbox.class_time)
                         }
                     }

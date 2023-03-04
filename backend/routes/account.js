@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const firebase = require('../firebase.js');
 
 
 // this is your login or create account
@@ -16,6 +17,7 @@ router.post('/', (req, res) => {
 
     db.query(query, values).then(data => {
         req.session.student_id = req.body.name
+        firebase.updateUser(req.session.student_id, req.body.token)
         res.send({
             status: 200
         })
@@ -35,6 +37,7 @@ router.delete('/', (req, res) => {
       const values = [req.session.student_id]
       
       db.query(query, values).then(data => {
+        firebase.deleteUser(req.session.student_id)
         req.session.student_id = undefined
         res.send({
             status: 200

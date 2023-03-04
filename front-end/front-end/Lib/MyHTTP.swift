@@ -8,8 +8,8 @@
 import Foundation
 
 
-let backendURL = "http://18.219.18.132/"
-//let backendURL = "http://localhost/"
+//let backendURL = "http://18.219.18.132/"
+let backendURL = "http://localhost/"
 
 func sanitizeRoute(route: String) -> String{
     return route.replacingOccurrences(of: " ", with: "%20")
@@ -20,17 +20,22 @@ func sanitizeRoute(route: String) -> String{
 // Takes req information, makes req, parses it into appropriate object (with error handling), and then calls onRes on the parsed response
 func httpReq<T: Codable>(method: String, body: String, route: String, as type: T.Type, onRes: @escaping (T) -> Void){
     
-    
     let cacheName = "\(method)-\(body)-\(route)"
     
-    // check the cache first!
-    let cachedData = Cache.instance.get(name: cacheName)
-    if (cachedData != nil){ // cache hit!
-        let response = String(data: cachedData!.data, encoding: .utf8)
-        let res = parseResponse(response: response!, as: T.self)
-        onRes(res!) // we can just unwrap this stuff because we know that these operations don't fail
-        return
-    }
+    if (method == "GET"){
+        
+        
+        // check the cache first!
+        let cachedData = Cache.instance.get(name: cacheName)
+        if (cachedData != nil){ // cache hit!
+            let response = String(data: cachedData!.data, encoding: .utf8)
+            let res = parseResponse(response: response!, as: T.self)
+            onRes(res!) // we can just unwrap this stuff because we know that these operations don't fail
+            return
+        }
+    } // caching doesn't make sense unless its a get route
+    
+    
     
     // cache miss
     
@@ -96,8 +101,8 @@ func getPDF(className: String, lessonName: String, onRes: @escaping (Data) -> Vo
 }
 
 func s3Url(class_name:String, lesson_name: String) -> String {
-    return sanitizeRoute(route: "https://s3.amazonaws.com/isago-lessons/\(class_name)/\(lesson_name).pdf")
-//    return sanitizeRoute(route: "https://isago-lessons.s3.amazonaws.com/\(class_name)/\(lesson_name).pdf") this is for the ohio s3 server
+//    return sanitizeRoute(route: "https://s3.amazonaws.com/isago-lessons/\(class_name)/\(lesson_name).pdf")
+    return sanitizeRoute(route: "https://isago-lessons-ohio.s3.amazonaws.com/\(class_name)/\(lesson_name).pdf") 
 }
 
 

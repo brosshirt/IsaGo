@@ -12,8 +12,6 @@ import JWTDecode
 
 struct ContentView: View {
     
-    @State var homeview = false
-    
     @Environment(\.colorScheme) var colorScheme // dark mode
     
     @EnvironmentObject var userInfo:UserInfo
@@ -37,16 +35,16 @@ struct ContentView: View {
                                 print("There's an error interpreting the result of the apple/google sign in")
                                 return
                             }
-                            print(email)
                             let body = """
                             {
-                                "name": "\(email.substring(start: 0, end: 6))"
+                                "name": "\(email)",
+                                "token": "\(userInfo.token)"
                             }
-                            """ // I know this way of defining objects seems really stupid but after looking at the alternatives its not so bad
+                            """
                             httpReq(method: "POST", body: body, route: "account", as: EmptyResponse.self){ loginResponse in
                                 httpReq(method: "GET", body: "", route: "classes", as: ClassesResponse.self){ classesResponse in
                                     userInfo.updateClasses(taking: classesResponse.taking, notTaking: classesResponse.notTaking)
-                                    userInfo.student_id = email.substring(start:0, end: 6)
+                                    userInfo.student_id = email
                                 }
                             }
                     }

@@ -43,7 +43,7 @@ router.post('/lesson', multer().single('lessonfile'), (req,res) => {
         else{ // authenticated
             
             const params = {
-                Bucket: 'isago-lessons',
+                Bucket: process.env.AWS_BUCKET,
                 Key: `${req.body.classname}/${req.body.lessonname}.pdf`, // name of file in s3
                 Body: req.file.buffer,
                 ContentType: 'application/pdf',

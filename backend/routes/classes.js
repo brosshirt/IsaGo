@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const firebase = require('../firebase.js');
 
 router.get('/', (req, res) => {
     console.log("/classes is being touched by " + req.session.student_id);
@@ -47,6 +48,7 @@ router.post('/', (req,res) => {
     const values = [req.session.student_id, req.body.class_name, req.body.class_time]
 
     db.query(query, values).then(data => {
+        firebase.addNotif(req.session.student_id, req.body.class_name, req.body.class_time)
         res.send({
             status: 200
         })
@@ -68,6 +70,7 @@ router.delete('/', (req,res) => {
 
 
     db.query(query, values).then(data => {
+        firebase.removeNotif(req.session.student_id, req.body.class_name, req.body.class_time)
         res.send({
             status: 200
         })

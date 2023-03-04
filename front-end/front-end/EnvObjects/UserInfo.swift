@@ -13,9 +13,15 @@ import Foundation
 // ANY OPERATION THAT MODIFIES A STATE OBJECT MUST TAKE PLACE ON THE MAIN THREAD
 // @MainActor is supposed to be a way of ensuring that all code takes place on the mainthread, but it's not removing all errors, so for now I'm just going to throw critical code in .main.async
 class UserInfo: ObservableObject{
+    
+    static let instance = UserInfo()
+    private init() {}
+    
     @Published var classes: Classes = Classes(taking: [], notTaking: [])
     
     @Published var student_id: String = ""
+    
+    @Published var token: String = ""
     
     func updateClasses(taking: [Class], notTaking: [Class]){
         DispatchQueue.main.async{

@@ -9,7 +9,13 @@ xcuserdata/
 *.xcscmblueprint
 *.xccheckout
 
+## normal stuff I added myself
 .env
+**/.env
+
+**/GoogleService-Info.plist
+
+node_modules/
 
 ## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
 build/
