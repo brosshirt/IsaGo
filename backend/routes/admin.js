@@ -2,12 +2,54 @@ const express = require('express');
 const router = express.Router();
 const crypto = require("crypto-js");
 const multer = require('multer');
+const csv = require('fast-csv');
 const s3 = require('../s3.js').s3;
 
 
 router.get('/', (req,res) => {
     res.render('admin')
 })
+
+router.get('/feedback/:username/:password', (req, res) => {
+    console.log('/feedback baby')
+
+
+    let pw = crypto.SHA256(req.params.password).toString()
+
+    const query = `select * from admin where username = $1` // search the db for the user
+    const values = [req.params.username]
+
+    db.query(query, values).then(data => {
+        if (data.rows.length === 0){ // no user found
+            return res.send({
+                status: 401,
+                msg: "There are no admin users with that username"
+            })
+        }
+        // I'm going to ignore the weird situation where there are multiple admin users with the same username
+        if (data.rows[0].hash !== pw){ // pw doesn't match
+            return res.send({
+                status: 401,
+                msg: "Incorrect password"
+            })
+        }
+
+        // authenticated
+        const query = `select * from feedback;` 
+        const values = []
+
+        const currentDate = new Date();
+        const dateString = currentDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename=feedback_${dateString}.csv`);
+
+        db.query(query, values).then(data => {
+            csv.writeToStream(res, data.rows, { headers: true, includeEndRowDelimiter: true });
+        })
+    })
+})
+
 
 
 router.post('/lesson', multer().single('lessonfile'), (req,res) => {
@@ -98,15 +140,7 @@ router.post('/lesson', multer().single('lessonfile'), (req,res) => {
                     })
                 })
             });
-
-            
-        }
-
-        
-        
-        
-        
-        
+        }    
     }).catch(err => {
         console.log(err)
         res.send({
@@ -117,8 +151,6 @@ router.post('/lesson', multer().single('lessonfile'), (req,res) => {
 
 
 })
-
-
 
 
 module.exports = router;

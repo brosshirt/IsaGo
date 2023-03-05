@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const sgMail = require('@sendgrid/mail')
 
 router.post('/', (req, res) => {
     console.log("/feedback is being touched by " + req.session.student_id);
@@ -30,6 +31,7 @@ router.post('/', (req, res) => {
     const values = [sanitizedReqBody.class_name, sanitizedReqBody.lesson_name, sanitizedReqBody.feedback, req.session.student_id]
 
     db.query(query, values).then(data => {
+        sendFeedbackEmail(req.session.student_id, sanitizedReqBody.feedback, sanitizedReqBody.class_name, sanitizedReqBody.lesson_name)
         res.send({
             status: 200,
         })
@@ -39,12 +41,70 @@ router.post('/', (req, res) => {
             status:400,
             msg: "Somebody has already sent that exact feedback"
         })
-    })
-    
-    
-
-    
+    }) 
 })
+
+function sendFeedbackEmail(studentID, feedback, className, lessonName){
+    const msg = {
+    to: 'rmg321@lehigh.edu', 
+    from: 'bmr222@lehigh.edu', 
+    subject: 'New Feedback!',
+    text: 'This is irrelevant',
+    html: `
+            <html>
+                <head>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            font-size: 14px;
+                            line-height: 1.5;
+                        }
+                        .container {
+                            max-width: 600px;
+                            margin: 0 auto;
+                            padding: 20px;
+                            background-color: #f7f7f7;
+                            border: 1px solid #ddd;
+                        }
+                        h1 {
+                            margin-top: 0;
+                            margin-bottom: 20px;
+                            font-size: 20px;
+                            font-weight: bold;
+                        }
+                        p {
+                            margin: 0 0 10px;
+                        }
+                        .feedback {
+                            margin-top: 20px;
+                            padding: 10px;
+                            background-color: #fff;
+                            border: 1px solid #ddd;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                    <h1>Student ${studentID} added some feedback${className ? ' on class ' + className : ''}${lessonName ? ' and lesson ' + lessonName : ''}</h1>
+                    <div class="feedback">
+                        <p>${feedback}</p>
+                    </div>
+                    </div>
+                </body>
+            </html>
+            `,
+        }
+        sgMail
+        .send(msg)
+        .then(() => {
+            console.log('Email sent')
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+    }
+
+
 
 
 module.exports = router;
