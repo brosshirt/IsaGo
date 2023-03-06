@@ -46,6 +46,18 @@ router.get('/feedback/:username/:password', (req, res) => {
 
         db.query(query, values).then(data => {
             csv.writeToStream(res, data.rows, { headers: true, includeEndRowDelimiter: true });
+        }).catch(err => {
+            console.log(err)
+            return res.send({
+                status: 500,
+                msg: `Error occurred sending the csv or getting the data`
+            })
+        })
+    }).catch(err => {
+        console.log(err)
+        return res.send({
+            status: 500,
+            msg: `Error occurred signing you in maybe?`
         })
     })
 })

@@ -12,6 +12,12 @@ const firestore = admin.firestore()
 
 // this either creates a new user account and adds the token or simply adds the token if its new
 function updateUser(studentId, token){
+
+    if (studentId.length === 6){
+        console.log('this user is using an old version of the app and will not have notifications')
+        return
+    }
+
     
     const usersCollection = firestore.collection('users')
 
@@ -47,6 +53,11 @@ function updateUser(studentId, token){
 }
 
 function deleteUser(studentId){
+    if (studentId.length === 6){
+        console.log('this user is using an old version of the app and will not have notifications')
+        return
+    }
+    
     const usersCollection = firestore.collection('users');
 
     removeAllNotifs(studentId)
@@ -63,6 +74,13 @@ function deleteUser(studentId){
 }
 
 function addNotif(studentId, className, classTime){
+    
+    if (studentId.length === 6){
+        console.log('this user is using an old version of the app and will not have notifications')
+        return
+    }
+    
+    
     let notificationSchedule = timestring.addToTimeString(classTime, -15)
 
     content = {
@@ -89,6 +107,12 @@ function addNotif(studentId, className, classTime){
 }
 // removes a particular notification
 function removeNotif(studentId, className, classTime){
+    if (studentId.length === 6){
+        console.log('this user is using an old version of the app and will not have notifications')
+        return
+    }
+    
+    
     const notificationsCollection = firestore.collection('notifications');
 
 
@@ -107,6 +131,11 @@ function removeNotif(studentId, className, classTime){
 }
 // removes all the notifications for a particular user
 function removeAllNotifs(studentId){
+    if (studentId.length === 6){
+        console.log('this user is using an old version of the app and will not have notifications')
+        return
+    }
+    
     const notificationsCollection = firestore.collection('notifications');
 
     notificationsCollection.where('studentId', '==', studentId).get()
