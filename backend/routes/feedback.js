@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_KEY)
 
 router.post('/', (req, res) => {
     console.log("/feedback is being touched by " + req.session.student_id);
@@ -24,6 +25,8 @@ router.post('/', (req, res) => {
 
     console.log(sanitizedReqBody)
 
+    console.log(sanitizedReqBody.feedback)
+
 
     const query = `insert into feedback values ($1, $2, $3, default, $4)`
 
@@ -45,8 +48,13 @@ router.post('/', (req, res) => {
 })
 
 function sendFeedbackEmail(studentID, feedback, className, lessonName){
+    
+    
+    console.log(feedback)
+
+
     const msg = {
-    to: 'rmg321@lehigh.edu', 
+    to: 'bmr222@lehigh.edu', 
     from: 'bmr222@lehigh.edu', 
     subject: 'New Feedback!',
     text: 'This is irrelevant',
@@ -87,7 +95,14 @@ function sendFeedbackEmail(studentID, feedback, className, lessonName){
                     <div class="container">
                     <h1>Student ${studentID} added some feedback${className ? ' on class ' + className : ''}${lessonName ? ' and lesson ' + lessonName : ''}</h1>
                     <div class="feedback">
-                        <p>${feedback}</p>
+                        ${feedback.replace(/&/g, '&amp;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;')
+                            .replace(/"/g, '&quot;')
+                            .replace(/'/g, '&#x27;')
+                            .replace(/\\/g, '\\\\') // replace backslashes with double backslashes
+                            .replace(/\t/g, '&#x09;')
+                            .replace(/\n/g, '<br>')}
                     </div>
                     </div>
                 </body>

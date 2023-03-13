@@ -98,13 +98,21 @@ struct FeedbackView: View {
 }
 
 func submitFeedback(selectedClass: String, selectedLesson: String, feedback: String){
+    let escapedFeedback = feedback
+        .replacingOccurrences(of: "\\", with: "\\\\") // escape backslashes
+        .replacingOccurrences(of: "\n", with: "\\n") // escape newline characters
+        .replacingOccurrences(of: "\t", with: "\\t") // escape tab characters
+        .replacingOccurrences(of: "\r", with: "\\r") // escape carriage return characters
+        .replacingOccurrences(of: "\"", with: "\\\"") // escape double quote characters
+    
     let body = """
     {
         "class_name": "\(selectedClass)",
         "lesson_name": "\(selectedLesson)",
-        "feedback": "\(feedback)"
+        "feedback": "\(escapedFeedback)"
     }
     """
+    print(body)
     httpReq(method: "POST", body: body, route: "feedback", as: EmptyResponse.self) { emptyResponse in } // no need to do anything w res
 }
 
