@@ -54,7 +54,7 @@ function sendFeedbackEmail(studentID, feedback, className, lessonName){
 
 
     const msg = {
-    to: 'bmr222@lehigh.edu', 
+    to: 'rmg321@lehigh.edu', 
     from: 'bmr222@lehigh.edu', 
     subject: 'New Feedback!',
     text: 'This is irrelevant',

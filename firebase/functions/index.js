@@ -112,8 +112,8 @@ exports.schedulePubSub = functions.firestore
               topicName: `projects/${projectId}/topics/classNotifs`,
               data: Buffer.from(JSON.stringify(newNotification)).toString('base64')
             },
-            schedule: "* * * * *",
-            // schedule: toCronSyntax(newNotification.notificationSchedule),
+            // schedule: "* * * * *",
+            schedule: toCronSyntax(newNotification.notificationSchedule),
             timeZone: 'America/New_York'
         };
 
