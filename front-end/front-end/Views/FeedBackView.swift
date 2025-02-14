@@ -91,7 +91,7 @@ struct FeedbackView: View {
                     .opacity(0.7)
                     .padding()
             }
-            .opacity(submitted ? 1 : 0) // invisible when submitted is false
+//            .opacity(submitted ? 1 : 0) // invisible when submitted is false
         }
         
     }

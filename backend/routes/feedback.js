@@ -23,10 +23,6 @@ router.post('/', (req, res) => {
         feedback: req.body.feedback,
     }
 
-    console.log(sanitizedReqBody)
-
-    console.log(sanitizedReqBody.feedback)
-
 
     const query = `insert into feedback values ($1, $2, $3, default, $4)`
 
@@ -54,8 +50,8 @@ function sendFeedbackEmail(studentID, feedback, className, lessonName){
 
 
     const msg = {
-    to: 'rmg321@lehigh.edu', 
-    from: 'bmr222@lehigh.edu', 
+    to: 'brosshirt@gmail.com', 
+    from: 'brosshirt@gmail.com', 
     subject: 'New Feedback!',
     text: 'This is irrelevant',
     html: `

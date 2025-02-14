@@ -5,7 +5,7 @@ const dbLib = require('./db.js');
 
 require('dotenv').config()
 
-db = dbLib.getDB()
+db = dbLib.getDB() // available in all routes
 
 app.set('view engine', 'ejs'); 
 

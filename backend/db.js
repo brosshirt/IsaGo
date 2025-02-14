@@ -9,6 +9,24 @@ function buildDB(db){
     buildLessonTable(db)
     buildLectureTable(db)
     buildFeedbackTable(db)
+    buildAdminTable(db)
+}
+
+function buildAdminTable(db){
+    db.query(`create table if not exists admin(
+        username varchar primary key, 
+        hash varchar 
+    )`).then(data => {
+        const query = `insert into admin values ($1, $2) on conflict(username) do nothing`
+  
+        const values = ['root', '6d7cd4295692cf696d5c12504732e7a25a094ac5bca5d847ae1e5f8bc02170a6']
+    
+        db.query(query, values).then(data => {
+            console.log('added root if not exists')
+        })
+    })
+
+
 }
 
 function buildClassTable(db){

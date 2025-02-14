@@ -101,7 +101,7 @@ router.post('/lesson', multer().single('lessonfile'), (req,res) => {
                 Key: `${req.body.classname}/${req.body.lessonname}.pdf`, // name of file in s3
                 Body: req.file.buffer,
                 ContentType: 'application/pdf',
-                ACL: 'public-read'
+                // ACL: 'public-read'
             };
 
             s3.putObject(params, (err, data) => {

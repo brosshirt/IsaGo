@@ -59,7 +59,6 @@ struct HomeView: View {
                 }
             }
         }
-        
     }
 }
 // Our goal is to only print class names, not classtimes, so we don't want to repeat class names.

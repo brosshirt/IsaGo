@@ -46,8 +46,11 @@ struct LessonView: View {
             Loader()
                 .onAppear{
                     getPDF(className: lesson.class_name, lessonName: lesson.lesson_name) { data in
-                        pdfDocument = PDFDocument(data: data)!
-                        isLoading = false
+                        if let doc = PDFDocument(data: data) {
+                            isLoading = false
+                            pdfDocument = doc
+                        }
+
                     }
                 }
         }

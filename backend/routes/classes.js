@@ -5,6 +5,7 @@ const firebase = require('../firebase.js');
 router.get('/', (req, res) => {
     console.log("/classes is being touched by " + req.session.student_id);
 
+    // this returns the sections and adds a column istaking based on whether the student is taking this class
     const query = `WITH taking AS (
         select class_name, class_time from section where (class_name, class_time) in (
             select class_name, class_time from takes where student_id = $1)
@@ -108,7 +109,7 @@ router.get('/:class_name', (req, res) => {
         })
 })
 
-
+// gets the lectures for a particular section
 router.get('/:class_name/:class_time', (req, res) => {
     console.log("/:class_name/:class_time is being touched by " + req.session.student_id);
     

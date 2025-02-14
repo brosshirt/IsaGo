@@ -1,6 +1,5 @@
 FROM node:16
 
-# Initialize repos and upgrade the base system
 COPY . /app
 
 WORKDIR /app

@@ -8,8 +8,8 @@
 import Foundation
 
 
-let backendURL = "http://18.219.18.132/"
-//let backendURL = "http://localhost/"
+//let backendURL = "http://18.219.18.132/"
+let backendURL = "http://localhost/"
 
 func sanitizeRoute(route: String) -> String{
     return route.replacingOccurrences(of: " ", with: "%20")
@@ -91,6 +91,8 @@ func getPDF(className: String, lessonName: String, onRes: @escaping (Data) -> Vo
     URLSession.shared.dataTask(with: url) { data, response, error in
         if let data = data, error == nil {
             Cache.instance.add(name: cacheName, data: CacheableData(data))
+            
+            
             onRes(data)
         } else {
             // later on this needs to print something to the screen explaining the error by modifying some state variable
@@ -102,7 +104,9 @@ func getPDF(className: String, lessonName: String, onRes: @escaping (Data) -> Vo
 
 func s3Url(class_name:String, lesson_name: String) -> String {
 //    return sanitizeRoute(route: "https://s3.amazonaws.com/isago-lessons/\(class_name)/\(lesson_name).pdf")
-    return sanitizeRoute(route: "https://isago-lessons-ohio.s3.amazonaws.com/\(class_name)/\(lesson_name).pdf") 
+//    print(sanitizeRoute(route: "https://isago-lessons-ohio.s3.amazonaws.com/\(class_name)/\(lesson_name).pdf"))
+//    return sanitizeRoute(route: "https://isago-lessons-ohio.s3.amazonaws.com/\(class_name)/\(lesson_name).pdf")
+    return sanitizeRoute(route: "https://isago-lessons.s3.us-east-1.amazonaws.com/test.pdf")
 }
 
 
